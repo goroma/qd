@@ -1,14 +1,6 @@
 # 系统简介
 
-* Choristes指的是放牛班运营支撑系统。
-
-  #TODO
-
-* 相关项目资料:
-
-    前台[模版](http://www.cssauthor.com/e-commerce-website-templates/ "cssauthor.com/")地址.
-
-    使用的是[第一个](https://p.w3layouts.com/demos/shopin/web/ "w3layouts").
+* 后台管理。
 
 ***
 
