@@ -77,21 +77,6 @@
 2. 然后，自己本机上搭建数据库dbname,  username: root; password: xxxx，初始化项目 `./init`,
    根据实际情况自行修改本地数据库连接配置文件(common/config/main-local.php),然后执行 `./yii migrate`就可以在本机上进行开发了,必须给对应模块下runtime可读写权限。
 
-3. 递归创建日志目录`mkdir -p /log/app`和`mkdir -p /log/wechat`，并给予最大权限`chmod -R 777 /log`.
-
-4. 微信功能模块部分，系统把媒体文件都放到qiniu云，所以需要配置qiniu相关信息;
-   微信音频是`amr`或`speex`格式，在上传到qiniu云时使用`ffmpeg`进行转码，先转换为mp3再转存到qiniu，所以确保环境里有`ffmpeg`且可用.
-
-5. 如果要使用websocket模块功能，在项目目录下可使用如下命令开启或关闭websocket服务：
-
-   > start:`nohup ./yii websocket/start chat3 &`
-
-   > stop:`./yii websocket/stop`
-
-   > restart:`nohup ./yii websocket/restart chat3 &`
-
-   * 注意: 网页监听的地址端口要与`/common/main.php`里配置的websocket地址和端口一致，不然网页会提示启动失败.
-
 ***
 
 ## 部署说明：
