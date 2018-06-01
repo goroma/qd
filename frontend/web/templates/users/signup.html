@@ -1,0 +1,56 @@
+<h1>SignUp</h1>
+
+<p>Please fill out the following fields to login:</p>
+
+<div class="row">
+    <div class="col-lg-5">
+        <form ng-submit="signup()" name="signupForm" id="signup-form" method="post" role="form" >
+
+            <div ng-class="{ 'has-success': !error['username'] && submitted,
+                'has-error': error['username'] && submitted }" class="form-group has-feedback required">
+                <input ng-model="userModel.username" type="text" class="form-control" placeholder="username">
+                <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                <p class="help-block help-block-error">{{ error['username'] }}</p>
+            </div>
+
+            <div ng-class="{ 'has-success': !error['email'] && submitted,
+                'has-error': error['email'] && submitted }" class="form-group has-feedback required">
+                <input ng-model="userModel.email" type="email" class="form-control" placeholder="Email">
+                <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                <p class="help-block help-block-error">{{ error['email'] }}</p>
+            </div>
+
+            <div ng-class="{ 'has-success': !error['password'] && submitted,
+                'has-error': error['password'] && submitted }" class="form-group has-feedback required">
+                <input ng-model="userModel.password" type="password" class="form-control" placeholder="Password">
+                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                <p class="help-block help-block-error">{{ error['password'] }}</p>
+            </div>
+
+            <div ng-class="{ 'has-success': !error['retype_password'] && submitted,
+                'has-error': error['retype_password'] && submitted }" class="form-group has-feedback required">
+                <input ng-model="userModel.retype_password" type="password" class="form-control" placeholder="Retype password">
+                <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
+                <p class="help-block help-block-error">{{ error['retype_password'] }}</p>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-8">
+                    <div class="checkbox icheck">
+                        <label style="padding-left:20px;">
+                            <input ng-model="userModel.terms" type="checkbox"> 我同意预约平台 <a href="#">条款</a>
+                        </label>
+                    </div>
+                </div>
+                <!-- /.col -->
+                <div class="col-xs-4">
+                    <button type="submit" class="btn btn-primary btn-block btn-flat">注册</button>
+                </div>
+                <!-- /.col -->
+            </div>
+
+        </form>
+        <a href="#/login" class="text-center">已有账号？去登录</a>
+    </div>
+</div>
+

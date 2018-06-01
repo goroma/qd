@@ -1,0 +1,16 @@
+frontend/runtime/*
+backend/runtime/*
+backend/web/uploads/*
+api/runtime/*
+console/runtime/*
+./yii
+nohup.out
+/.idea/*
+/nbproject/private/
+/.settings
+/.project
+/.php_cs.cache
+/tags
+/composer.phar
+/composer.lock
+/vendor/*

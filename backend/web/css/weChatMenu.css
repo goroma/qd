@@ -1,0 +1,83 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+li{
+    list-style-type: none;
+}
+a{
+    text-decoration: none;
+}
+.but-hide{
+    display: none;
+}
+.bg{
+    background: url(/img/iphone.png) no-repeat;
+    background-size: 100% 100%;
+    width: 290px;
+    height: 592px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+.mobile-content{
+    width: 248px;
+    height: 443px;
+    margin: 76px 0 0 21px;
+    position: relative;
+}
+.mobile-footer{
+    width: 100%;
+    height: 35px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    border-top: 1px solid #ccc;
+    background-color: #ffffff;
+}
+.mobile-footer ul{
+    display: flex;
+}
+.mobile-footer li{
+    border-right: 1px solid #eee;
+    flex-flow: row;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    flex: 1;
+    flex-wrap: nowrap;
+    border-right: 1px solid #ccc;
+}
+.mobile-footer li:nth-child(1){
+    flex: inherit;
+    width: 15% !important;
+}
+.mobile-footer li:last-of-type{
+    border-right: 0;
+}
+.mobile-nav{
+    width: 71px;
+    position: absolute;
+    bottom: 42px;
+    border: 1px solid #eee;
+    border-bottom: 0;
+    background-color: #ffffff;
+    border-radius: 5px;
+}
+.mobile-nav:nth-of-type(1){
+    left: 15%;
+}
+.mobile-nav:nth-of-type(2){
+    left: 43%;
+}
+.mobile-nav:nth-of-type(3){
+    right: 1px;
+}
+.mobile-nav a{
+    display: block;
+    width: 71px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    color: #333;
+}
