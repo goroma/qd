@@ -21,7 +21,8 @@ class m180601_123544_inf_hid extends Migration
             'id' => Schema::TYPE_UPK.' COMMENT \'ID\'',
             'driver_id' => Schema::TYPE_INTEGER.' UNSIGNED NOT NULL DEFAULT 0 COMMENT \'包ID\'',
             'inf_id' => Schema::TYPE_INTEGER.' UNSIGNED NOT NULL DEFAULT 0 COMMENT \'inf ID\'',
-            'hid' => Schema::TYPE_STRING.' DEFAULT NULL COMMENT \'文件ID\'',
+            'hid_name' => Schema::TYPE_STRING.' DEFAULT NULL COMMENT \'硬件名称\'',
+            'hid' => Schema::TYPE_STRING.' DEFAULT NULL COMMENT \'硬件ID\'',
             'created_at' => Schema::TYPE_DATETIME.' DEFAULT NULL COMMENT \'创建时间\'',
             'updated_at' => Schema::TYPE_DATETIME.' DEFAULT NULL COMMENT \'编辑时间\'',
         ], $tableOptions);
