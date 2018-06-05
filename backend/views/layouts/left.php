@@ -50,7 +50,15 @@ echo Menu::widget(
                         'label' => '包管理',
                         'can' => 'sidebar_driver',
                         'url' => [
-                            '#',
+                            'driver/driver/index',
+                        ],
+                        'icon' => 'angle-right',
+                    ],
+                    [
+                        'label' => '包系统管理',
+                        'can' => 'sidebar_driver_os',
+                        'url' => [
+                            'driver/driver-os/index',
                         ],
                         'icon' => 'angle-right',
                     ],
@@ -58,7 +66,15 @@ echo Menu::widget(
                         'label' => 'inf管理',
                         'can' => 'sidebar_inf',
                         'url' => [
-                            '#',
+                            'driver/inf/index',
+                        ],
+                        'icon' => 'angle-right',
+                    ],
+                    [
+                        'label' => '硬件ID管理',
+                        'can' => 'sidebar_inf_hid',
+                        'url' => [
+                            'driver/inf-hid/index',
                         ],
                         'icon' => 'angle-right',
                     ],
