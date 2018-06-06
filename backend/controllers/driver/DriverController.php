@@ -8,6 +8,7 @@ use backend\models\driver\DriverSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * DriverController implements the CRUD actions for Driver model.
@@ -32,10 +33,35 @@ class DriverController extends Controller
      */
     public function actionIndex()
     {
+        $model = new Driver();
         $searchModel = new DriverSearch;
         $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
 
+        //批量上传
+        if(Yii::$app->request->isPost) {
+            $data = \Yii::$app->request->post();
+            $model->load($data);
+            $file = UploadedFile::getInstance($model, 'driver_file');
+
+            if (!isset($file->baseName)) {
+                \Yii::$app->getSession()->setFlash('error','请上传包信息！');
+                return $this->redirect(['index']);
+            }
+
+            $filePath = $file->tempName;
+            var_dump($file);
+            die;
+
+            $result = false;
+
+            if ($result == false) {
+                \Yii::$app->getSession()->setFlash('error','上传驱动包数据错误！');
+                return $this->redirect(['index']);
+            }
+        }
+
         return $this->render('index', [
+            'model' => $model,
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);

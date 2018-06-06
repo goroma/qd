@@ -157,4 +157,6 @@ return [
     'Customer' => '客户',
     'Analysis' => '分析',
     'Daily' => '日常',
+
+    'Driver' => '驱动包',
 ];
