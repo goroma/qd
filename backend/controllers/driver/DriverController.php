@@ -3,12 +3,15 @@
 namespace backend\controllers\driver;
 
 use Yii;
-use backend\models\driver\Driver;
-use backend\models\driver\DriverSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use backend\models\driver\Inf;
+use backend\models\driver\Driver;
+use backend\models\driver\DriverOs;
+use backend\models\driver\DriverSearch;
+use common\models\common\QdBass;
 
 /**
  * DriverController implements the CRUD actions for Driver model.
@@ -44,18 +47,35 @@ class DriverController extends Controller
             $file = UploadedFile::getInstance($model, 'driver_file');
 
             if (!isset($file->baseName)) {
-                \Yii::$app->getSession()->setFlash('error','请上传包信息！');
+                \Yii::$app->getSession()->setFlash('error', '请上传包信息！');
                 return $this->redirect(['index']);
             }
 
-            $filePath = $file->tempName;
-            var_dump($file);
-            die;
+            $filename = $file->tempName;
+            try {
+                $qd = new QdBass();
+                $configs = $qd->readInfZip($filename);
 
-            $result = false;
+                foreach ($configs as $data) {
+                    $driver_model = new Driver();
+                    $driver = $driver_model->insertData($data['qd_config']);
+                    if (!$driver || is_string($driver)) {
+                        \Yii::$app->getSession()->setFlash('error', $driver);
+                        return $this->redirect(['index']);
+                        continue;
+                    }
 
-            if ($result == false) {
-                \Yii::$app->getSession()->setFlash('error','上传驱动包数据错误！');
+                    if ($driver) {
+                        $driver_os_model = new DriverOs();
+                        $driver_os_model->insertData($driver, $data['qd_config']);;
+
+                        $inf_model = new Inf();
+                        $inf_model->insertData($driver, $data['qd_config']);
+                    }
+                }
+            } catch (\Exception $e) {
+                //\Yii::$app->getSession()->setFlash('error', '上传驱动包数据错误！');
+                \Yii::$app->getSession()->setFlash('error', $e->getMessage());
                 return $this->redirect(['index']);
             }
         }
