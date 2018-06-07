@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
+use kartik\widgets\Select2;
 use kartik\datecontrol\DateControl;
 
 /**
@@ -21,11 +22,20 @@ use kartik\datecontrol\DateControl;
         'columns' => 1,
         'attributes' => [
 
-            'driver_id' => ['type' => Form::INPUT_TEXT, 'options' => ['placeholder' => 'Enter 包ID...']],
-
-            'created_at' => ['type' => Form::INPUT_WIDGET, 'widgetClass' => DateControl::classname(),'options' => ['type' => DateControl::FORMAT_DATETIME]],
-
-            'updated_at' => ['type' => Form::INPUT_WIDGET, 'widgetClass' => DateControl::classname(),'options' => ['type' => DateControl::FORMAT_DATETIME]],
+            'driver_id' => [
+                'type' => Form::INPUT_WIDGET,
+                'label' => '包名称',
+                'widgetClass' => Select2::classname(),
+                'options' => [
+                    'data' => $drivers,
+                    'options' => [
+                        'placeholder' => '请选择包',
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                    ],
+                ],
+            ],
 
             'qd_os' => ['type' => Form::INPUT_TEXT, 'options' => ['placeholder' => 'Enter 操作系统...', 'maxlength' => 255]],
 
@@ -37,6 +47,14 @@ use kartik\datecontrol\DateControl;
 
     echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'),
         ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']
+    );
+
+    echo Html::a(Yii::t('app', 'Cancel'),
+        ['driver/driver-os/index'],
+        [
+            'class' => 'btn btn-default',
+            'style' => 'margin-left:10px',
+        ]
     );
     ActiveForm::end(); ?>
 

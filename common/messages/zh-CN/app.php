@@ -159,4 +159,5 @@ return [
     'Daily' => '日常',
 
     'Driver' => '驱动包',
+    'Driver Os' => '驱动包操作系统',
 ];

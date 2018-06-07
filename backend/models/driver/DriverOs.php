@@ -6,7 +6,7 @@ use Yii;
 
 class DriverOs extends \common\models\DriverOs
 {
-    public $all_32_pf = [
+    public static $all_32_pf = [
         'win10' => 32,
         'win81' => 32,
         'win8' => 32,
@@ -16,7 +16,7 @@ class DriverOs extends \common\models\DriverOs
         'win2k3' => 32,
     ];
 
-    public $all_64_pf = [
+    public static $all_64_pf = [
         'win10' => 64,
         'win81' => 64,
         'win8' => 64,
@@ -24,6 +24,16 @@ class DriverOs extends \common\models\DriverOs
         'winxp' => 64,
         'vista' => 64,
         'win2k3' => 64,
+    ];
+
+    public static $all_os = [
+        'win10' => 'win10',
+        'win81' => 'win81',
+        'win8' => 'win8',
+        'win7' => 'win7',
+        'winxp' => 'winxp',
+        'vista' => 'vista',
+        'win2k3' => 'win2k3',
     ];
 
     public function insertData(Driver $driver, $data)
@@ -63,10 +73,10 @@ class DriverOs extends \common\models\DriverOs
         $insert_sql = "INSERT INTO {$table_name} (driver_id, qd_pf, qd_os, created_at, updated_at) VALUES ";
 
         if ('all' == $type) {
-            foreach ($this->all_32_pf as $os => $pf) {
+            foreach (self::all_32_pf as $os => $pf) {
                 $values .= "({$driver->id}, '{$pf}', '{$os}', '{$date_time}', '{$date_time}'),";
             }
-            foreach ($this->all_64_pf as $os => $pf) {
+            foreach (self::all_64_pf as $os => $pf) {
                 $values .= "({$driver->id}, '{$pf}', '{$os}', '{$date_time}', '{$date_time}'),";
             }
 
@@ -77,7 +87,7 @@ class DriverOs extends \common\models\DriverOs
         }
 
         if ('allx64' == $type) {
-            foreach ($this->all_64_pf as $os => $pf) {
+            foreach (self::all_64_pf as $os => $pf) {
                 $values .= "({$driver->id}, '{$pf}', '{$os}', '{$date_time}', '{$date_time}'),";
             }
 
@@ -88,7 +98,7 @@ class DriverOs extends \common\models\DriverOs
         }
 
         if ('allx86' == $type) {
-            foreach ($this->all_32_pf as $os => $pf) {
+            foreach (self::all_32_pf as $os => $pf) {
                 $values .= "({$driver->id}, '{$pf}', '{$os}', '{$date_time}', '{$date_time}'),";
             }
 

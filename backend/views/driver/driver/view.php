@@ -9,21 +9,21 @@ use kartik\datecontrol\DateControl;
  * @var backend\models\driver\Driver $model
  */
 
-$this->title = $model->id;
+$this->title = $model->qd_name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Drivers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="driver-view">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
-
-
     <?= DetailView::widget([
         'model' => $model,
         'condensed' => false,
         'hover' => true,
         'mode' => Yii::$app->request->get('edit') == 't' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
+        'buttons1' => Html::a(
+            '<span class="glyphicon glyphicon-backward"></span>',
+            Yii::$app->urlManager->createUrl(['driver/driver/index']
+        ), ['title' => Yii::t('app', 'GoBack')]).
+        ' {delete}',
         'panel' => [
             'heading' => $this->title,
             'type' => DetailView::TYPE_INFO,
@@ -33,42 +33,21 @@ $this->params['breadcrumbs'][] = $this->title;
             'qd_name',
             'qd_file_size',
             'qd_sha256',
-            'qd_install_type',
+            [
+                'label' => '安装方式',
+                'attribute' => 'qd_install_type',
+                'value' => $model::$install_type[$model->qd_install_type],
+            ],
             'qd_source',
             'qd_download_url:url',
-            'qd_instruction:ntext',
             'rank',
             'language',
             'parameter',
             'note',
             'type',
-            [
-                'attribute' => 'created_at',
-                'format' => [
-                    'datetime', (isset(Yii::$app->modules['datecontrol']['displaySettings']['datetime']))
-                        ? Yii::$app->modules['datecontrol']['displaySettings']['datetime']
-                        : 'd-m-Y H:i:s A'
-                ],
-                'type' => DetailView::INPUT_WIDGET,
-                'widgetOptions' => [
-                    'class' => DateControl::classname(),
-                    'type' => DateControl::FORMAT_DATETIME
-                ]
-            ],
-            [
-                'attribute' => 'updated_at',
-                'format' => [
-                    'datetime', (isset(Yii::$app->modules['datecontrol']['displaySettings']['datetime']))
-                        ? Yii::$app->modules['datecontrol']['displaySettings']['datetime']
-                        : 'd-m-Y H:i:s A'
-                ],
-                'type' => DetailView::INPUT_WIDGET,
-                'widgetOptions' => [
-                    'class' => DateControl::classname(),
-                    'type' => DateControl::FORMAT_DATETIME
-                ]
-            ],
-            'is_del',
+            'qd_instruction:ntext',
+            'created_at',
+            'updated_at',
         ],
         'deleteOptions' => [
             'url' => ['delete', 'id' => $model->id],

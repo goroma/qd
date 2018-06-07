@@ -7,16 +7,14 @@ use yii\helpers\Html;
  * @var backend\models\driver\Driver $model
  */
 
-$this->title = Yii::t('app', 'Update {modelClass}: ', [
-    'modelClass' => 'Driver',
-]) . ' ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Drivers'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
+$this->title = Yii::t('app', 'Update') . Yii::t('app', 'Driver') . ': ' . $model->qd_name;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Driver'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->qd_name, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
 <div class="driver-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h4><?= Html::encode($this->title) ?></h4>
 
     <?= $this->render('_form', [
         'model' => $model,

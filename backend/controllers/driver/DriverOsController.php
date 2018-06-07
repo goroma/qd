@@ -3,6 +3,7 @@
 namespace backend\controllers\driver;
 
 use Yii;
+use backend\models\driver\Driver;
 use backend\models\driver\DriverOs;
 use backend\models\driver\DriverOsSearch;
 use yii\web\Controller;
@@ -65,12 +66,14 @@ class DriverOsController extends Controller
     public function actionCreate()
     {
         $model = new DriverOs;
+        $drivers = Driver::getAllDriverArray();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'drivers' => $drivers,
             ]);
         }
     }
@@ -84,12 +87,14 @@ class DriverOsController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $drivers = Driver::getAllDriverArray();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'drivers' => $drivers,
             ]);
         }
     }

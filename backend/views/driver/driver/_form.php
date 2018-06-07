@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\builder\Form;
+use kartik\widgets\Select2;
 use kartik\datecontrol\DateControl;
 
 /**
@@ -21,19 +22,24 @@ use kartik\datecontrol\DateControl;
         'columns' => 1,
         'attributes' => [
 
-            'qd_install_type' => ['type' => Form::INPUT_TEXT, 'options' => ['placeholder' => 'Enter 安装方式,0:未知,1:inf,2:exe...']],
+            'qd_name' => ['type' => Form::INPUT_TEXT, 'options' => ['placeholder' => 'Enter 包名称...', 'maxlength' => 255]],
+
+            'qd_install_type' => [
+                'type' => Form::INPUT_WIDGET,
+                'label' => '安装方式',
+                'widgetClass' => Select2::classname(),
+                'options' => [
+                    'data' => $model::$install_type,
+                    'options' => [
+                        'placeholder' => '请选择安装方式',
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                    ],
+                ],
+            ],
 
             'rank' => ['type' => Form::INPUT_TEXT, 'options' => ['placeholder' => 'Enter 权重...']],
-
-            'is_del' => ['type' => Form::INPUT_TEXT, 'options' => ['placeholder' => 'Enter 是否删除...']],
-
-            'qd_instruction' => ['type' => Form::INPUT_TEXTAREA, 'options' => ['placeholder' => 'Enter 说明...','rows' => 6]],
-
-            'created_at' => ['type' => Form::INPUT_WIDGET, 'widgetClass' => DateControl::classname(),'options' => ['type' => DateControl::FORMAT_DATETIME]],
-
-            'updated_at' => ['type' => Form::INPUT_WIDGET, 'widgetClass' => DateControl::classname(),'options' => ['type' => DateControl::FORMAT_DATETIME]],
-
-            'qd_name' => ['type' => Form::INPUT_TEXT, 'options' => ['placeholder' => 'Enter 包名称...', 'maxlength' => 255]],
 
             'qd_file_size' => ['type' => Form::INPUT_TEXT, 'options' => ['placeholder' => 'Enter 大小...', 'maxlength' => 255]],
 
@@ -51,12 +57,21 @@ use kartik\datecontrol\DateControl;
 
             'note' => ['type' => Form::INPUT_TEXT, 'options' => ['placeholder' => 'Enter 备注...', 'maxlength' => 1024]],
 
+            'qd_instruction' => ['type' => Form::INPUT_TEXTAREA, 'options' => ['placeholder' => 'Enter 说明...','rows' => 6]],
         ]
 
     ]);
 
     echo Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'),
         ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']
+    );
+
+    echo Html::a(Yii::t('app', 'Cancel'),
+        ['driver/driver/index'],
+        [
+            'class' => 'btn btn-default',
+            'style' => 'margin-left:10px',
+        ]
     );
     ActiveForm::end(); ?>
 

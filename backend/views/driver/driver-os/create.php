@@ -7,18 +7,17 @@ use yii\helpers\Html;
  * @var backend\models\driver\DriverOs $model
  */
 
-$this->title = Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Driver Os',
-]);
+$this->title = Yii::t('app', 'Create').Yii::t('app', 'Driver Os');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Driver Os'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="driver-os-create">
     <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
+        <h4><?= Html::encode($this->title) ?></h4>
     </div>
     <?= $this->render('_form', [
         'model' => $model,
+        'drivers' => $drivers,
     ]) ?>
 
 </div>

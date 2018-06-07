@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\widgets\Select2;
 
 /**
  * @var yii\web\View $this
@@ -20,6 +21,16 @@ use yii\widgets\ActiveForm;
     <div class="row">
         <div class="col-sm-2">
             <?= $form->field($model, 'qd_name') ?>
+        </div>
+
+        <div class="col-sm-2">
+            <?php echo $form->field($model, 'qd_install_type')->widget(Select2::classname(), [
+                'data' => $model::$install_type,
+                'options' => ['placeholder' => '请选择安装方式'],
+                'pluginOptions' => [
+                    'allowClear' => true,
+                ],
+            ]); ?>
         </div>
 
         <div class="form-group">
