@@ -73,10 +73,10 @@ class DriverOs extends \common\models\DriverOs
         $insert_sql = "INSERT INTO {$table_name} (driver_id, qd_pf, qd_os, created_at, updated_at) VALUES ";
 
         if ('all' == $type) {
-            foreach (self::all_32_pf as $os => $pf) {
+            foreach (self::$all_32_pf as $os => $pf) {
                 $values .= "({$driver->id}, '{$pf}', '{$os}', '{$date_time}', '{$date_time}'),";
             }
-            foreach (self::all_64_pf as $os => $pf) {
+            foreach (self::$all_64_pf as $os => $pf) {
                 $values .= "({$driver->id}, '{$pf}', '{$os}', '{$date_time}', '{$date_time}'),";
             }
 
@@ -87,7 +87,7 @@ class DriverOs extends \common\models\DriverOs
         }
 
         if ('allx64' == $type) {
-            foreach (self::all_64_pf as $os => $pf) {
+            foreach (self::$all_64_pf as $os => $pf) {
                 $values .= "({$driver->id}, '{$pf}', '{$os}', '{$date_time}', '{$date_time}'),";
             }
 
@@ -98,7 +98,7 @@ class DriverOs extends \common\models\DriverOs
         }
 
         if ('allx86' == $type) {
-            foreach (self::all_32_pf as $os => $pf) {
+            foreach (self::$all_32_pf as $os => $pf) {
                 $values .= "({$driver->id}, '{$pf}', '{$os}', '{$date_time}', '{$date_time}'),";
             }
 

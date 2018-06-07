@@ -7,7 +7,7 @@ class Driver extends \common\models\Driver
     public function insertData($data)
     {
         if (isset($data['qd_sha256'])) {
-            $driver = self::find()->where(['qd_sha256' => $data['qd_sha256']])->one();
+            $driver = self::find()->where(['qd_sha256' => $data['qd_sha256'], 'is_del' => self::NOT_DEL])->one();
             if ($driver) {
                 return $driver->qd_name.' 此包已上传';
             }
