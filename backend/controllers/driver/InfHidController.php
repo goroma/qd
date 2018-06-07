@@ -4,10 +4,13 @@ namespace backend\controllers\driver;
 
 use Yii;
 use backend\models\driver\InfHid;
+use backend\models\driver\Driver;
 use backend\models\driver\InfHidSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 
 /**
  * InfHidController implements the CRUD actions for InfHid model.
@@ -65,12 +68,16 @@ class InfHidController extends Controller
     public function actionCreate()
     {
         $model = new InfHid;
+        $drivers = Driver::getAllDriverArray();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
+            $infs = [];
             return $this->render('create', [
                 'model' => $model,
+                'drivers' => $drivers,
+                'infs' => $infs,
             ]);
         }
     }
@@ -84,12 +91,19 @@ class InfHidController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $drivers = Driver::getAllDriverArray();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
+            $infs = [];
+            $driver = $model->driver;
+            $infs = ArrayHelper::map($driver->infs, 'id', 'inf_name');
+
             return $this->render('update', [
                 'model' => $model,
+                'drivers' => $drivers,
+                'infs' => $infs,
             ]);
         }
     }
@@ -121,5 +135,31 @@ class InfHidController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionGetDriverInf()
+    {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $post = Yii::$app->request->post('depdrop_parents');
+            if ($post != null && $post[0] && !isset($post[1])) {
+                $driver_id = $post[0];
+                $driver = Driver::findOne($driver_id);
+                $infs = $driver->infs;
+
+                $infs = ArrayHelper::map($infs, 'id', 'inf_name');
+
+                foreach ($infs as $id => $inf_name) {
+                    $out[$id]['id'] = $id;
+                    $out[$id]['name'] = $inf_name;
+                }
+
+                echo Json::encode(['output' => $out, 'selected' => '']);
+
+                return;
+            }
+        }
+
+        echo Json::encode(['output' => '', 'selected' => '']);
     }
 }

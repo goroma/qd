@@ -10,31 +10,52 @@ use yii\widgets\Pjax;
  * @var backend\models\driver\InfSearch $searchModel
  */
 
-$this->title = Yii::t('app', 'Infs');
+$this->title = Yii::t('app', 'Inf');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="inf-index">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> <?= Yii::t('app', 'Inf').Yii::t('app', 'Query') ?></h3>
+        </div>
+        <div class="panel-body">
+            <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+        </div>
     </div>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?php /* echo Html::a(Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Inf',
-]), ['create'], ['class' => 'btn btn-success'])*/  ?>
-    </p>
 
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        'pager' => [
+            'firstPageLabel' => 'ι‹',
+            'lastPageLabel' => '›ι',
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'driver_id',
+            [
+                'attribute' => 'driver_id',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return Html::a('<span class="glyphicon glyphicon-eye-open"></span> '.$model->driver_id,
+                        Yii::$app->urlManager->createUrl(['driver/driver/view', 'id' => $model->driver_id]),
+                        [
+                            'title' => '查看包详情',
+                            'data-pjax' => 0,
+                        ]
+                    );
+                },
+            ],
+            [
+                'attribute' => 'driver_id',
+                'label' => '包名称',
+                'value' => function ($model) {
+                    return $model->driver->qd_name;
+                },
+            ],
             'class',
             'driver_ver',
+            'driver_pubtime',
             'driver_original_pubtime',
 //            ['attribute' => 'driver_pubtime','format' => ['date',(isset(Yii::$app->modules['datecontrol']['displaySettings']['date'])) ? Yii::$app->modules['datecontrol']['displaySettings']['date'] : 'd-m-Y']], 
 //            'driver_provider', 
@@ -45,11 +66,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
+                'header' => Yii::t('app', 'Operation'),
                 'buttons' => [
                     'update' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-pencil"></span>',
-                            Yii::$app->urlManager->createUrl(['inf/view', 'id' => $model->id, 'edit' => 't']),
-                            ['title' => Yii::t('yii', 'Edit'),]
+                            Yii::$app->urlManager->createUrl(['driver/inf/update', 'id' => $model->id, 'edit' => 't']),
+                            ['title' => Yii::t('yii', 'Update')]
                         );
                     }
                 ],
@@ -63,8 +85,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'panel' => [
             'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-th-list"></i> '.Html::encode($this->title).' </h3>',
             'type' => 'info',
-            'before' => Html::a('<i class="glyphicon glyphicon-plus"></i> Add', ['create'], ['class' => 'btn btn-success']),
-            'after' => Html::a('<i class="glyphicon glyphicon-repeat"></i> Reset List', ['index'], ['class' => 'btn btn-info']),
+            'before' => Html::a('<i class="glyphicon glyphicon-plus"></i> '.Yii::t('app', 'Add'), ['create'], ['class' => 'btn btn-success']),
+            'after' => Html::a('<i class="glyphicon glyphicon-repeat"></i> '.Yii::t('app', 'Reset List'), ['index'], ['class' => 'btn btn-info']),
             'showFooter' => false
         ],
     ]); Pjax::end(); ?>

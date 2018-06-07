@@ -9,21 +9,22 @@ use kartik\datecontrol\DateControl;
  * @var backend\models\driver\Inf $model
  */
 
-$this->title = $model->id;
+$this->title = $model->inf_name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Infs'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="inf-view">
-    <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
-
 
     <?= DetailView::widget([
         'model' => $model,
         'condensed' => false,
         'hover' => true,
         'mode' => Yii::$app->request->get('edit') == 't' ? DetailView::MODE_EDIT : DetailView::MODE_VIEW,
+        'buttons1' => Html::a(
+            '<span class="glyphicon glyphicon-backward"></span>',
+            Yii::$app->urlManager->createUrl(['driver/inf/index']
+        ), ['title' => Yii::t('app', 'GoBack')]).
+        ' {delete}',
         'panel' => [
             'heading' => $this->title,
             'type' => DetailView::TYPE_INFO,
@@ -31,51 +32,20 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'driver_id',
+            [
+                'label' => '包名称',
+                'attribute' => 'driver_id',
+                'value' => $model->driver->qd_name,
+            ],
+            'inf_name',
+            'inf_sha256',
             'class',
             'driver_ver',
             'driver_original_pubtime',
-            [
-                'attribute' => 'driver_pubtime',
-                'format' => [
-                    'date', (isset(Yii::$app->modules['datecontrol']['displaySettings']['date']))
-                        ? Yii::$app->modules['datecontrol']['displaySettings']['date']
-                        : 'd-m-Y'
-                ],
-                'type' => DetailView::INPUT_WIDGET,
-                'widgetOptions' => [
-                    'class' => DateControl::classname(),
-                    'type' => DateControl::FORMAT_DATE
-                ]
-            ],
+            'driver_pubtime',
             'driver_provider',
-            'inf_name',
-            'inf_sha256',
-            [
-                'attribute' => 'created_at',
-                'format' => [
-                    'datetime', (isset(Yii::$app->modules['datecontrol']['displaySettings']['datetime']))
-                        ? Yii::$app->modules['datecontrol']['displaySettings']['datetime']
-                        : 'd-m-Y H:i:s A'
-                ],
-                'type' => DetailView::INPUT_WIDGET,
-                'widgetOptions' => [
-                    'class' => DateControl::classname(),
-                    'type' => DateControl::FORMAT_DATETIME
-                ]
-            ],
-            [
-                'attribute' => 'updated_at',
-                'format' => [
-                    'datetime', (isset(Yii::$app->modules['datecontrol']['displaySettings']['datetime']))
-                        ? Yii::$app->modules['datecontrol']['displaySettings']['datetime']
-                        : 'd-m-Y H:i:s A'
-                ],
-                'type' => DetailView::INPUT_WIDGET,
-                'widgetOptions' => [
-                    'class' => DateControl::classname(),
-                    'type' => DateControl::FORMAT_DATETIME
-                ]
-            ],
+            'created_at',
+            'updated_at',
         ],
         'deleteOptions' => [
             'url' => ['delete', 'id' => $model->id],

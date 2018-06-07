@@ -4,6 +4,7 @@ namespace backend\controllers\driver;
 
 use Yii;
 use backend\models\driver\Inf;
+use backend\models\driver\Driver;
 use backend\models\driver\InfSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -65,12 +66,14 @@ class InfController extends Controller
     public function actionCreate()
     {
         $model = new Inf;
+        $drivers = Driver::getAllDriverArray();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'drivers' => $drivers,
             ]);
         }
     }
@@ -84,12 +87,14 @@ class InfController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $drivers = Driver::getAllDriverArray();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'drivers' => $drivers,
             ]);
         }
     }

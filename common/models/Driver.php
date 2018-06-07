@@ -58,4 +58,9 @@ class Driver extends \dbbase\models\Driver
     {
         return ArrayHelper::map(self::getAllDriver(), 'id', 'qd_name');
     }
+
+    public function getInfs()
+    {
+        return $this->hasMany(Inf::className(), ['driver_id' => 'id']);
+    }
 }

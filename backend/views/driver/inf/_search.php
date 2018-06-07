@@ -17,31 +17,27 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <div class="row">
+        <div class="col-sm-2">
+            <?= $form->field($model, 'driver_qd_name') ?>
+        </div>
+        <div class="col-sm-2">
+            <?= $form->field($model, 'class') ?>
+        </div>
+        <div class="col-sm-2">
+            <?= $form->field($model, 'driver_ver') ?>
+        </div>
 
-    <?= $form->field($model, 'driver_id') ?>
-
-    <?= $form->field($model, 'class') ?>
-
-    <?= $form->field($model, 'driver_ver') ?>
-
-    <?= $form->field($model, 'driver_original_pubtime') ?>
-
-    <?php // echo $form->field($model, 'driver_pubtime') ?>
-
-    <?php // echo $form->field($model, 'driver_provider') ?>
-
-    <?php // echo $form->field($model, 'inf_name') ?>
-
-    <?php // echo $form->field($model, 'inf_sha256') ?>
-
-    <?php // echo $form->field($model, 'created_at') ?>
-
-    <?php // echo $form->field($model, 'updated_at') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
+        <div class="form-group">
+            <?= Html::submitButton(Yii::t('app', 'Search'), [
+                'class' => 'btn btn-primary',
+                'style' => 'margin-top:24px',
+            ]) ?>
+            <?= Html::resetButton(Yii::t('app', 'Reset'), [
+                'class' => 'btn btn-default',
+                'style' => 'margin-top:24px',
+            ]) ?>
+        </div>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="driver-os-index">
     <div class="panel panel-info">
         <div class="panel-heading">
-            <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> <?= Yii::t('app', 'Driver').Yii::t('app', 'Query') ?></h3>
+            <h3 class="panel-title"><i class="glyphicon glyphicon-search"></i> <?= Yii::t('app', 'Driver Os').Yii::t('app', 'Query') ?></h3>
         </div>
         <div class="panel-body">
             <?php echo $this->render('_search', ['model' => $searchModel]); ?>
