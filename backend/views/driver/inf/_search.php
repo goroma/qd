@@ -25,7 +25,10 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'class') ?>
         </div>
         <div class="col-sm-2">
-            <?= $form->field($model, 'driver_ver') ?>
+            <?= $form->field($model, 'inf_name') ?>
+        </div>
+        <div class="col-sm-2">
+            <?= $form->field($model, 'driver_provider') ?>
         </div>
 
         <div class="form-group">

@@ -78,13 +78,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             'qd_source',
-//            'qd_download_url:url',
 //            'qd_instruction:ntext',
 //            'rank',
-            'language',
+            //'language',
+            'qd_sha256',
 //            'parameter',
 //            'note',
-//            'type',
+            'type',
+            'qd_download_url:url',
 
             [
                 'class' => 'yii\grid\ActionColumn',
