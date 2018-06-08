@@ -81,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'qd_instruction:ntext',
 //            'rank',
             //'language',
-            'qd_sha256',
+            //'qd_sha256',
 //            'parameter',
 //            'note',
             'type',
