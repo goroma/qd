@@ -74,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             'hid_name',
-            //'hid',
+            'hid',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t('app', 'Operation'),

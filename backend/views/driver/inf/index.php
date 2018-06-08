@@ -53,6 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->driver->qd_name;
                 },
             ],
+            'inf_name', 
             'class',
             'driver_ver',
             'driver_pubtime',
