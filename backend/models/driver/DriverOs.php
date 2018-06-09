@@ -148,7 +148,7 @@ class DriverOs extends \common\models\DriverOs
 
     public static function delOsByDriver(Driver $driver)
     {
-        self::deleteAll(['driver_id' => $driver]);
+        self::deleteAll(['driver_id' => $driver->id]);
     }
 
     public function saveOs(Driver $driver)
