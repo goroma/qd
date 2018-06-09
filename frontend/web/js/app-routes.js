@@ -6,7 +6,7 @@ define(function (require) {
         $rootScope.$stateParams = $stateParams;
     }]);
 
-    app.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', '$translateProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, $translateProvider) {
+    app.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function ($stateProvider, $urlRouterProvider, $httpProvider) {
         $urlRouterProvider.otherwise('/home');
 
         $stateProvider.
@@ -17,7 +17,7 @@ define(function (require) {
                 controllerUrl: 'js/home/homeController',
                 controller: 'homeController',
                 dependencies: [
-                    'js/filters/translate',
+                    //'js/filters/translate',
                 ]
             }).
             state('users', {
@@ -121,17 +121,17 @@ define(function (require) {
             var lang = window.localStorage.lang || 'cn';
 
             // configures staticFilesLoader
-            $translateProvider.useStaticFilesLoader({
-                prefix: '/i18n/',
-                suffix: '.json'
-            });
-            $translateProvider.preferredLanguage(lang);
+            //$translateProvider.useStaticFilesLoader({
+                //prefix: '/i18n/',
+                //suffix: '.json'
+            //});
+            //$translateProvider.preferredLanguage(lang);
 
             // Enable escaping of HTML
             //$translateProvider.useSanitizeValueStrategy('sanitize');
 
             // Enable escaping of HTML
-            $translateProvider.useSanitizeValueStrategy('escape');
+            //$translateProvider.useSanitizeValueStrategy('escape');
     }]);
 
     app.factory('authInterceptor', function ($q, $window, $location) {
@@ -152,17 +152,17 @@ define(function (require) {
         };
     });
 
-    app.factory('T', ['$translate', function($translate) {
-        var T = {
-            T:function (key) {
-                if (key) {
-                    $translate(key).then(function (translatedValue) {
-                        return translatedValue;
-                    });
-                }
-                return key;
-            }
-        }
-        return T;
-    }]);
+    //app.factory('T', ['$translate', function($translate) {
+        //var T = {
+            //T:function (key) {
+                //if (key) {
+                    //$translate(key).then(function (translatedValue) {
+                        //return translatedValue;
+                    //});
+                //}
+                //return key;
+            //}
+        //}
+        //return T;
+    //}]);
 });

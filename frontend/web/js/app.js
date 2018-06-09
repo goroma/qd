@@ -4,15 +4,15 @@ define(function (require, exports, module) {
     require('angular-ui-router');
 
     // 翻译
-    var angular_translate = require('angular-translate');
+    //var angular_translate = require('angular-translate');
 
     // 文件翻译
-    require('angular-translate-loader-static-files');
+    //require('angular-translate-loader-static-files');
     
     // 翻译安全转义
     require('angular-sanitize');
 
-    var app = angular.module('app', ['ui.router', 'pascalprecht.translate', 'ngSanitize']);
+    var app = angular.module('app', ['ui.router', 'ngSanitize']);
 
     asyncLoader.configure(app);
 

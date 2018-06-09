@@ -8,13 +8,13 @@ require.config({
         'angular-cookies': 'lib/angular-cookies/angular-cookies.min',
         'angular-sanitize': 'lib/angular-sanitize/angular-sanitize.min',
         'messageformat': 'lib/messageformat',
-        'angular-translate': 'lib/angular-translate.min',
-        'angular-translate-handler-log': 'lib/angular-translate-handler-log/angular-translate-handler-log.min',
-        'angular-translate-interpolation-messageformat': 'lib/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.min',
-        'angular-translate-loader-static-files': 'lib/angular-translate-loader-static-files/angular-translate-loader-static-files.min',
-        'angular-translate-loader-url': 'lib/angular-translate-loader-url/angular-translate-loader-url.min',
-        'angular-translate-storage-cookie': 'lib/angular-translate-storage-cookie/angular-translate-storage-cookie.min',
-        'angular-translate-storage-local': 'lib/angular-translate-storage-local/angular-translate-storage-local.min',
+        //'angular-translate': 'lib/angular-translate.min',
+        //'angular-translate-handler-log': 'lib/angular-translate-handler-log/angular-translate-handler-log.min',
+        //'angular-translate-interpolation-messageformat': 'lib/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.min',
+        //'angular-translate-loader-static-files': 'lib/angular-translate-loader-static-files/angular-translate-loader-static-files.min',
+        //'angular-translate-loader-url': 'lib/angular-translate-loader-url/angular-translate-loader-url.min',
+        //'angular-translate-storage-cookie': 'lib/angular-translate-storage-cookie/angular-translate-storage-cookie.min',
+        //'angular-translate-storage-local': 'lib/angular-translate-storage-local/angular-translate-storage-local.min',
         'ng-tags-input': 'lib/ng-tags-input/build/ng-tags-input.min',
         'ng-file-upload': 'lib/ng-file-upload/dist/ng-file-upload-all.min',
         'header': 'js/home/HeaderController',
@@ -31,18 +31,18 @@ require.config({
                 //'angular-translate',
             ]
         },
-        'angular-translate': {
-            deps: [
-                'angular',
-                //'angular-translate-loader-static-files'
-            ],
-            exports: 'angular-translate'
-        },
-        'angular-translate-loader-static-files': {
-            deps: [
-                'angular-translate',
-            ],
-        },
+        //'angular-translate': {
+            //deps: [
+                //'angular',
+                ////'angular-translate-loader-static-files'
+            //],
+            //exports: 'angular-translate'
+        //},
+        //'angular-translate-loader-static-files': {
+            //deps: [
+                //'angular-translate',
+            //],
+        //},
         'angular-sanitize': {
             deps: [
                 'angular',
