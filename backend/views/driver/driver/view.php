@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use kartik\detail\DetailView;
 use kartik\datecontrol\DateControl;
 
@@ -46,6 +47,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'note',
             'type',
             'qd_instruction:ntext',
+            [
+                'attribute' => 'driver_inf',
+                'value' => implode(';', ArrayHelper::getColumn($model->infs, 'inf_name')) ,
+            ],
+            'driver_os',
             'created_at',
             'updated_at',
         ],

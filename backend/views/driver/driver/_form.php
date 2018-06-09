@@ -58,6 +58,24 @@ use kartik\datecontrol\DateControl;
             'note' => ['type' => Form::INPUT_TEXT, 'options' => ['placeholder' => 'Enter 备注...', 'maxlength' => 1024]],
 
             'qd_instruction' => ['type' => Form::INPUT_TEXTAREA, 'options' => ['placeholder' => 'Enter 说明...','rows' => 6]],
+
+            'driver_inf' => ['type' => Form::INPUT_TEXT, 'options' => ['placeholder' => 'Enter 说明...', 'readOnly' => true]],
+
+            'driver_os' => [
+                'type' => Form::INPUT_WIDGET,
+                'label' => '安装方式',
+                'widgetClass' => Select2::classname(),
+                'options' => [
+                    'data' => $driver_os_model::$all_os_select,
+                    'options' => [
+                        'placeholder' => '请选择包操作系统',
+                        'multiple' => true,
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                    ],
+                ],
+            ],
         ]
 
     ]);

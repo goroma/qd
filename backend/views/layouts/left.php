@@ -54,14 +54,14 @@ echo Menu::widget(
                         ],
                         'icon' => 'angle-right',
                     ],
-                    [
-                        'label' => '包系统管理',
-                        'can' => 'sidebar_driver_os',
-                        'url' => [
-                            'driver/driver-os/index',
-                        ],
-                        'icon' => 'angle-right',
-                    ],
+                    //[
+                        //'label' => '包系统管理',
+                        //'can' => 'sidebar_driver_os',
+                        //'url' => [
+                            //'driver/driver-os/index',
+                        //],
+                        //'icon' => 'angle-right',
+                    //],
                     [
                         'label' => 'inf管理',
                         'can' => 'sidebar_inf',

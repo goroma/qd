@@ -6,6 +6,7 @@ use Yii;
 
 class DriverOs extends \common\models\DriverOs
 {
+    // 以下三个是在包管理选择文件导入使用
     public static $all_32_pf = [
         'win10' => 32,
         'win81' => 32,
@@ -15,7 +16,6 @@ class DriverOs extends \common\models\DriverOs
         'vista' => 32,
         'win2k3' => 32,
     ];
-
     public static $all_64_pf = [
         'win10' => 64,
         'win81' => 64,
@@ -25,7 +25,6 @@ class DriverOs extends \common\models\DriverOs
         'vista' => 64,
         'win2k3' => 64,
     ];
-
     public static $all_os = [
         'win10' => 'win10',
         'win81' => 'win81',
@@ -35,6 +34,29 @@ class DriverOs extends \common\models\DriverOs
         'vista' => 'vista',
         'win2k3' => 'win2k3',
     ];
+    public static $all_os_select = [
+        '1' => 'all',
+        '2' => 'all-32',
+        '3' => 'all-64',
+
+        '4' => 'win10-32',
+        '5' => 'win81-32',
+        '6' => 'win8-32',
+        '7' => 'win7-32',
+        '8' => 'winxp-32',
+        '9' => 'vista-32',
+        '10' => 'win2k3-32',
+
+        '11' => 'win10-64',
+        '12' => 'win81-64',
+        '13' => 'win8-64',
+        '14' => 'win7-64',
+        '15' => 'winxp-64',
+        '16' => 'vista-64',
+        '17' => 'win2k3-64',
+    ];
+
+    // 以下为包编辑页面使用
 
     public function insertData(Driver $driver, $data)
     {
@@ -121,6 +143,64 @@ class DriverOs extends \common\models\DriverOs
             return $str_int;
         } else {
             return $str;
+        }
+    }
+
+    public static function delOsByDriver(Driver $driver)
+    {
+        self::deleteAll(['driver_id' => $driver]);
+    }
+
+    public function saveOs(Driver $driver)
+    {
+        $options = self::$all_os_select;
+        $selects = array_map(function ($option) use ($options) {
+            return $options[$option];
+        }, $driver->driver_os);
+
+        if (in_array('all', $selects)) {
+            $this->insertAllXPf($driver, 'all');
+            return true;
+        }
+
+        if (in_array('all-32', $selects)) {
+            $this->insertAllXPf($driver, 'allx86');
+        } else {
+            foreach ($selects as $select) {
+                if (strpos($select, '32') !== false) {
+                    $driver_os = new DriverOs;
+                    $driver_os->driver_id = $driver->id;
+                    $os_array = explode('-', $select);
+                    if (isset($os_array[0]) && $os_array[0]) {
+                        $driver_os->qd_os = strtolower($os_array[0]);
+                    }
+
+                    if (isset($os_array[1]) && $os_array[1]) {
+                        $driver_os->qd_pf = trim($os_array[1]);
+                    }
+                    $driver_os->save();
+                }
+            }
+        }
+
+        if (in_array('all-64', $selects)) {
+            $this->insertAllXPf($driver, 'allx64');
+        } else {
+            foreach ($selects as $select) {
+                if (strpos($select, '64') !== false) {
+                    $driver_os = new DriverOs;
+                    $driver_os->driver_id = $driver->id;
+                    $os_array = explode('-', $select);
+                    if (isset($os_array[0]) && $os_array[0]) {
+                        $driver_os->qd_os = strtolower($os_array[0]);
+                    }
+
+                    if (isset($os_array[1]) && $os_array[1]) {
+                        $driver_os->qd_pf = trim($os_array[1]);
+                    }
+                    $driver_os->save();
+                }
+            }
         }
     }
 }

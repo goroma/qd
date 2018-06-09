@@ -6,6 +6,7 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
 use backend\models\driver\Inf;
 use backend\models\driver\Driver;
@@ -99,7 +100,15 @@ class DriverController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            return $this->render('view', ['model' => $model]);
+            $os = [];
+            foreach ($model->oses as $driver_os) {
+                $os[] = $driver_os->qd_os.'-'.$driver_os->qd_pf;
+            }
+            $model->driver_os = implode(';', $os);
+
+            return $this->render('view', [
+                'model' => $model,
+            ]);
         }
     }
 
@@ -130,12 +139,29 @@ class DriverController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $driver_os_model = new DriverOs;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            DriverOs::delOsByDriver($model);
+            $driver_os_model->saveOs($model);
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
+            $os = [];
+            foreach ($model->oses as $driver_os) {
+                $os[] = $driver_os->qd_os.'-'.$driver_os->qd_pf;
+            }
+            $options = $driver_os_model::$all_os_select;
+
+            $model->driver_os = array_map(function ($option) use ($options) {
+                return array_search($option, $options);
+            }, $os);
+
+            $model->driver_inf = implode(';', ArrayHelper::getColumn($model->infs, 'inf_name'));
             return $this->render('update', [
                 'model' => $model,
+                'driver_os_model' => $driver_os_model,
             ]);
         }
     }
