@@ -24,7 +24,7 @@ $this->title = 'sting';
 <?php $this->beginBody() ?>
 <div class="wrapper">
 
-    <div class="content-wrapper">
+    <div>
         <header class="header" ng-include ng-controller="HeaderController" src="'templates/home/header.html'">
         </header>
 

@@ -4,23 +4,25 @@ define(function (require) {
     app.controller('homeController', ['$scope', '$location', '$http', '$window',
             function ($scope, $location, $http, $window) {
                 $scope.name = 'Home of bobo';
+                $scope.login = function () {
+                    console.log('aaa');
+                    return false;
+                    $scope.submitted = true;
 
-                $scope.ua = navigator.userAgent.toLowerCase();
-                if ($scope.ua.match(/MicroMessenger/i) == "micromessenger") {
-                    //$http.post('api/get-we-chat-web-user').success(function (data) {
-                        //$scope.name = data.wechatUser.name;
-                        //$window.sessionStorage.access_token = data.access_token;
-                        //$location.path('/dashboard').replace();
-                    //}).error(function (data) {
-                        //angular.forEach(data, function (error) {
-                        //$scope.error[error.field] = error.message;
-                        //if (error.field == 'password') {
-                        //$scope.error['retype_password'] = error.message;
-                        //}
-                        //});
-                    //});
-                } else {
-                }
+                    $scope.error = {};
+                    $http.post('api/login', $scope.userModel).success(
+                            function (data) {
+                                $window.sessionStorage.access_token = data.access_token;
+                                $location.path('/dashboard').replace();
+                            }).error(
+                                function (data) {
+                                    angular.forEach(data, function (error) {
+                                        $scope.error[error.field] = error.message;
+                                    });
+                                }
+                            );
+                };
+
             }
     ]);
 });
