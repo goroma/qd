@@ -18,6 +18,7 @@ class InfHid extends \common\models\InfHid
                 $values = '';
                 $insert_sql = "INSERT INTO {$table_name} (driver_id, inf_id, hid_name, hid, created_at, updated_at) VALUES ";
                 foreach ($hids as $hid => $hid_name) {
+                    $hid = addcslashes($hid, "\\");
                     $values .= "({$driver->id}, {$inf->id}, '{$hid_name}', '{$hid}', '{$date_time}', '{$date_time}'),";
                 }
                 if ($values) {
@@ -29,6 +30,7 @@ class InfHid extends \common\models\InfHid
             $values = '';
             $insert_sql = "INSERT INTO {$table_name} (driver_id, inf_id, hid_name, hid, created_at, updated_at) VALUES ";
             foreach ($hids as $hid => $hid_name) {
+                $hid = addcslashes($hid, "\\");
                 $values .= "({$driver->id}, {$inf->id}, '{$hid_name}', '{$hid}', '{$date_time}', '{$date_time}'),";
             }
             if ($values) {
