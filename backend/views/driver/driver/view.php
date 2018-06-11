@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'qd_instruction:ntext',
             [
                 'attribute' => 'driver_inf',
-                'value' => implode(';', ArrayHelper::getColumn($model->infs, 'inf_name')) ,
+                'value' => implode(';', ArrayHelper::getColumn($model->infs, 'inf_name')),
             ],
             'driver_os',
             'created_at',

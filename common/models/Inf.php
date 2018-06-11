@@ -33,6 +33,7 @@ class Inf extends \dbbase\models\Inf
         return array_merge(
             $labels,
             [
+                'id' => Yii::t('app', 'inf ID'),
                 'driver_qd_name' => Yii::t('app', '包名称'),
             ]
         );

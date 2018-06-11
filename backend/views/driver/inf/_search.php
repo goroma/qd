@@ -22,6 +22,9 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'id') ?>
         </div>
         <div class="col-sm-2">
+            <?= $form->field($model, 'driver_id') ?>
+        </div>
+        <div class="col-sm-2">
             <?= $form->field($model, 'driver_qd_name') ?>
         </div>
         <div class="col-sm-2">

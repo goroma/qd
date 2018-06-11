@@ -34,6 +34,7 @@ class InfHid extends \dbbase\models\InfHid
         return array_merge(
             $labels,
             [
+                'id' => Yii::t('app', 'hid ID'),
                 'driver_qd_name' => Yii::t('app', '包名称'),
                 'driver_inf_name' => Yii::t('app', 'inf名称'),
             ]
