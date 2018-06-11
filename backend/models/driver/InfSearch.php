@@ -31,7 +31,7 @@ class InfSearch extends Inf
         $query = Inf::find();
 
         $dataProvider = new ActiveDataProvider([
-            'query' => $query,
+            'query' => $query->orderBy(['id' => SORT_DESC]),
         ]);
 
         if (!($this->load($params) && $this->validate())) {

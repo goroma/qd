@@ -31,7 +31,7 @@ class InfHidSearch extends InfHid
         $query = InfHid::find();
 
         $dataProvider = new ActiveDataProvider([
-            'query' => $query,
+            'query' => $query->orderBy(['id' => SORT_DESC]),
         ]);
 
         if (!($this->load($params) && $this->validate())) {
