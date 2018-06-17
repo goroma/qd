@@ -28,7 +28,7 @@ class InfHidSearch extends InfHid
 
     public function search($params)
     {
-        $query = InfHid::find();
+        $query = InfHid::find()->joinWith('driver as d')->where(['is_del' => 0]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query->orderBy(['id' => SORT_DESC]),
@@ -39,7 +39,7 @@ class InfHidSearch extends InfHid
         }
 
         if ($this->driver_qd_name != null) {
-            $query->joinWith('driver as d');
+            //$query->joinWith('driver as d');
             $dataProvider->sort->attributes['d.qd_name'] = [
                 'asc' => ['d.qd_name' => SORT_ASC],
                 'desc' => ['d.qd_name' => SORT_DESC],
