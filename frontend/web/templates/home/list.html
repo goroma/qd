@@ -1,0 +1,102 @@
+<!--content-->
+<div class="content">
+    <div class="container">
+        <div class="row" style="margin-top:60px">
+            <form ng-submit="login()" name="loginForm" id="login-form" method="post" role="form" >
+                <div class="row col-md-offset-2">
+                    <div class="col-xs-2" style="margin: 0; padding: 0;">
+                        <select class="form-control">
+                            <option value="1">硬件ID</option>
+                            <option value="2">设备名称</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-5" style="margin: 0; padding: 0;">
+                        <input ng-model="userModel.username" type="text" id="loginform-username" class="form-control">
+                    </div>
+                    <div class="col-xs-1" style="margin: 0; padding: 0;">
+                        <button type="submit" class="btn btn-primary" name="login-button">搜索</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <h5 class="page-header"></h5>
+
+        <div class="row">
+            <div class="col-md-7">匹配硬件ID：PCI\VEN_10EC&DEV_8169&SUBSYS_04CCA0A0 共找到xx个结果。</div>
+            <div class="col-md-5">
+                <div class="col-md-3" style="margin: 0; padding: 0;">
+                    操作系统过滤
+                </div>
+                <div class="col-md-3" style="margin: 0; padding: 0;margin-top:-5px">
+                    <select class="form-control">
+                        <option value="1">window 7</option>
+                        <option value="2">window 8</option>
+                    </select>
+                </div>
+                <div class="col-md-3" style="margin: 0; padding: 5;margin-top:-5px">
+                    <select class="form-control">
+                        <option value="1">64位</option>
+                        <option value="2">32位</option>
+                    </select>
+                </div>
+                <div class="col-xs-1" style="margin: 0; padding: 0;margin-top:-5px">
+                    <button type="submit" class="btn btn-primary" name="login-button">确定</button>
+                </div>
+
+            </div>
+        </div>
+
+        <h5 class="page-header"></h5>
+
+        <div class="row">
+            <div class="col-md-12">
+                设备名称： Realtek PCI GBE Family Controller
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 5px;">
+            <div class="col-md-3">
+                驱动版本： 7.089.0716.2014
+            </div>
+            <div class="col-md-3">
+                驱动日期：07/16/2014
+            </div>
+            <div class="col-md-4">
+                驱动大小： 486KB
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 5px;">
+            <div class="col-md-3">
+                驱动类型：Net
+            </div>
+            <div class="col-md-3">
+                驱动语言： 全球多语言
+            </div>
+            <div class="col-md-4">
+                安装方式： 直接运行EXE安装
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 5px;">
+            <div class="col-md-12">
+                驱动说明：网卡驱动
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 5px;">
+            <div class="col-md-12">
+                支持操作系统：WinXP，Win2003，Win7，Win8，Win8.1，Win10
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 5px;">
+            <div class="col-md-12">
+                下载地址：<a type="button" class="btn btn-link" ng-click="toDownload('hash')">点击下载</a>
+            </div>
+        </div>
+        <hr style="border:#d8d4d4 0.3px dashed;">
+    </div>
+</div>

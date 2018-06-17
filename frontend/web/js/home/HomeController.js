@@ -1,11 +1,12 @@
 define(function (require) {
     var app = require('../app');
 
-    app.controller('homeController', ['$scope', '$location', '$http', '$window',
+    app.controller('HomeController', ['$scope', '$location', '$http', '$window',
             function ($scope, $location, $http, $window) {
                 $scope.name = 'Home of bobo';
                 $scope.login = function () {
                     console.log('aaa');
+                    $location.path('/list').replace();
                     return false;
                     $scope.submitted = true;
 

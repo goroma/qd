@@ -25,17 +25,12 @@ $this->title = 'sting';
 <div class="wrapper">
 
     <div>
-        <header class="header" ng-include ng-controller="HeaderController" src="'templates/home/header.html'">
-        </header>
+        <!-- <header class="header" ng-include ng-controller="HeaderController" src="'templates/home/header.html'">
+        </header>-->
 
-        <div class="container" style="padding-top:50px">
+        <div class="container">
             <div ui-view>
             </div>
-
-            <!--brand-->
-            <div class="brand" ng-include ng-controller="BrandController" src="'templates/home/brand.html'">
-            </div>
-            <!--//brand-->
         </div>
     </div>
 

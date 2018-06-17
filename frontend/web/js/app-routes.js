@@ -14,11 +14,23 @@ define(function (require) {
                 url: '/home',
                 templateUrl: 'templates/home/home.html',
                  // new attribute for ajax load controller
-                controllerUrl: 'js/home/homeController',
-                controller: 'homeController',
+                controllerUrl: 'js/home/HomeController',
+                controller: 'HomeController',
                 dependencies: [
                     //'js/filters/translate',
                 ]
+            }).
+            state('list', {
+                url: '/list',
+                templateUrl: 'templates/home/list.html',
+                controllerUrl: 'js/home/ListController',
+                controller: 'ListController',
+            }).
+            state('download', {
+                url: '/download/:hash',
+                templateUrl: 'templates/home/download.html',
+                controllerUrl: 'js/home/DownloadController',
+                controller: 'DownloadController',
             }).
             state('users', {
                 url: '/users',
