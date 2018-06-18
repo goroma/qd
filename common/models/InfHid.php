@@ -56,4 +56,39 @@ class InfHid extends \dbbase\models\InfHid
     {
         return $this->hasOne(Inf::className(), ['id' => 'inf_id']);
     }
+
+    public function HdaudioSearch($hdaudio)
+    {
+        if (substr_count($hdaudio, '&') < 2) {
+            throw new \Exception('没有搜索到相关结果');
+        }
+
+        if (substr_count($hdaudio, '&') > 4) {
+            $pos = $this->getStrNPos($hdaudio, '&', 5);
+            $hdaudio = substr($hdaudio, 0, $pos);
+        }
+
+        $hids = self::find()
+            ->select(self::tableName().'.*')
+            ->joinWith([Driver::tableName.' d'])
+            ->where(['d.is_del' => Driver::NOT_DEL])
+            ->andWhere(['inf_id' => $hdaudio])
+            ->all();
+
+        if (!$hids) {
+            $hdaudio_array = explode('&', $hdaudio);
+        }
+        die;
+    }
+
+    public function getStrNPos($str, $needle, $num)
+    {
+        $n = 0;
+        for($i = 1;$i <= $num;$i++) {
+            $n = strpos($str, $needle, $n);
+            $i != $num && $n++;
+        }
+
+        return $n;
+    }
 }

@@ -3,23 +3,24 @@ define(function (require) {
 
     app.controller('HomeController', ['$scope', '$location', '$http', '$window',
             function ($scope, $location, $http, $window) {
-                $scope.name = 'Home of bobo';
-                $scope.login = function () {
-                    console.log('aaa');
-                    $location.path('/list').replace();
-                    return false;
-                    $scope.submitted = true;
+                $scope.types = [
+                    {name : "硬件ID", type : 1},
+                    {name : "设备名称", type : 2}
+                ];
+                $scope.searchModel = {};
 
-                    $scope.error = {};
-                    $http.post('api/login', $scope.userModel).success(
+                $scope.search = function () {
+                    $scope.error = '';
+
+                    $http.post('api/search', $scope.searchModel).success(
+                    //$http.post('api/login', $scope.searchModel).success(
                             function (data) {
-                                $window.sessionStorage.access_token = data.access_token;
-                                $location.path('/dashboard').replace();
+                                console.log(data);
+                                //$window.sessionStorage.access_token = data.access_token;
+                                //$location.path('/list').replace();
                             }).error(
                                 function (data) {
-                                    angular.forEach(data, function (error) {
-                                        $scope.error[error.field] = error.message;
-                                    });
+                                    $scope.error = data.message;
                                 }
                             );
                 };
