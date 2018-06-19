@@ -17,9 +17,14 @@ define(function (require) {
                     }
                 });
 
-                //$http.get('api/dashboard').success(function (data) {
-                    //$scope.dashboard = data;
-                //})
+                $http.post('api/search-content', $scope.searchModel).success(
+                    function (data) {
+                        console.log(data);
+                    }).error(
+                        function (data) {
+                            $scope.error = data.message;
+                        }
+                    );
 
                 $scope.toDownload = function toDownload(hash) {
                     console.log('download');

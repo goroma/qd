@@ -8,6 +8,7 @@ use yii\filters\AccessControl;
 use yii\filters\ContentNegotiator;
 use yii\filters\auth\HttpBearerAuth;
 use yii\web\BadRequestHttpException;
+use yii\web\NotFoundHttpException;
 
 use common\models\InfHid;
 
@@ -119,154 +120,98 @@ class ApiController extends Controller
         }
     }
 
-    /**
-     * 在微信浏览器访问时,获取微信网页授权获取到的微信用户信息.
-     */
-    public function actionGetWeChatWebUser()
-    {
-        $session = Yii::$app->session;
-        $session->open();
-
-        if ($wechatUser = $session->get('wechat_user')) {
-            return ['wechatUser' => $wechatUser];
-        } else {
-            return ['wechatUser' => ['id'=>'asdfa', 'name' => 'bobo']];
-        }
-    }
-
-    public function actionPayment()
-    {
-        $request = Yii::$app->request;
-        $post = $request->post();
-        $channel = $post['pay_type'];
-        $config = Payment::getPaymentConfig($post['type']);
-
-        // 订单数组
-        $order_no = date('Ymdhis').substr(microtime(), 2, 1).rand(0,9);
-        $orderData = [
-            "order_no"	=> $order_no,
-            "amount"	=> '0.01',// 单位为元 ,最小为0.01
-            "client_ip"	=> '127.0.0.1',
-            "subject"	=> '测试支付',
-            "body"	=> '支付接口测试',
-            'timeout_express' => time() + 600,
-            //"show_url"  => 'http://mall.tiyushe.com/goods/23.html',
-        ];
-
-        // 实例化环境类
-        //$charge = new ChargeContext();
-
-        //try {
-            //$orderData['openid'] = 'ofTN_wajIjD_cbPl8G14YSTOSNxE';
-
-            //$charge->initCharge($type, $config);
-
-            //$res = $charge->charge($orderData);
-
-            //// 创建订单
-            //Order::createOrder($orderData);
-        //} catch (PayException $e) {
-            //echo $e->errorMessage();exit;
-        //}
-
-        $orderData['openid'] = 'ofTN_wajIjD_cbPl8G14YSTOSNxE';
-        try {
-            $ret = Charge::run($channel, $config, $orderData);
-        } catch (PayException $e) {
-            echo $e->errorMessage();
-            exit;
-        }
-
-        if (is_array($ret)) {
-            return $ret;
-        } else {
-            if ('wx_pub' == $channel) {
-                return json_decode($ret);
-            } else {
-                return $ret;
-            }
-        }
-
-        //if ($type === Config::ALI_CHANNEL_APP) {
-            //var_dump($res);
-        //} elseif ($type === Config::WX_CHANNEL_QR) {
-
-            //$url = urlencode($res);
-            //echo "<img alt='扫码支付' src='http://paysdk.weixin.qq.com/example/qrcode.php?data={$url}' style='width:150px;height:150px;'/>";
-        //} elseif ($type === Config::WX_CHANNEL_PUB) {
-            //return json_decode($res);
-        //} elseif (stripos($type, 'wx') !== false) {
-            //var_dump($res);
-        //} else {
-            //return $res;
-            //// 跳转支付宝
-            ////header("Location:{$res}");
-        //}
-    }
-
     public function actionSearch()
     {
-        $post = Yii::$app->getRequest()->getBodyParams();
-        //print_r($post);
-        //die;
-        if (!in_array($post['type']['type'], [1, 2])) {
-            $error = '请选择硬件ID或设备名称';
-            throw new BadRequestHttpException($error, 400);
-        }
-        if (!isset($post['content']) || !$post['content']) {
-            $error = '请输入需要搜索的内容';
-            throw new BadRequestHttpException($error, 400);
-        }
-
-        if (1 == $post['type']['type']) {
-            $reg = '/^[a-zA-Z\\\0-9\*\_\{\}\&]+$/';
-            $error = '提示请输入正确的硬件ID格式';
-            if (!preg_match($reg, preg_quote($post['content']))) {
+        try {
+            $post = Yii::$app->getRequest()->getBodyParams();
+            if (!in_array($post['type']['type'], [1, 2])) {
+                $error = '请选择硬件ID或设备名称';
+                throw new BadRequestHttpException($error, 400);
+            }
+            if (!isset($post['content']) || !$post['content']) {
+                $error = '请输入需要搜索的内容';
                 throw new BadRequestHttpException($error, 400);
             }
 
-            // 第一种
-            //2.1 HDAUDIO\开头硬件ID；比如：HDAUDIO\FUNC_01&VEN_10EC&DEV_0280&SUBSYS_102805A5&REV_1000，按&分隔符把字符串分成5部分。
-            //HDAUDIO\FUNC_01&VEN_10EC&DEV_0280&SUBSYS_102805A5&REV_1000查询，如果有结果直接返回，没有进入下一步。
-            //去掉第五部分，变成HDAUDIO\FUNC_01&VEN_10EC&DEV_0280&SUBSYS_102805A5查询，如果有结果直接返回，没有进入下一步。
-            //去掉第四部分，变成HDAUDIO\FUNC_01&VEN_10EC&DEV_0280&REV_1000查询，如果有结果直接返回，没有进入下一步。
-            //去掉第四，五部分，变成HDAUDIO\FUNC_01&VEN_10EC&DEV_0280查询，如果有结果直接返回，没有就退出，显示无结果。
-            $inf_hid = new InfHid();
-            $reg = '/^(HDAUDIO\\\)(\w)*/i';
-            if (preg_match($reg, preg_quote($post['content']))) {
-                $result = $inf_hid->HdaudioSearch($post['content']);
-                if ($result) {
-                    return ['count' => $result, 'message' => 'success'];
+            if (1 == $post['type']['type']) {
+                $reg = '/^[a-zA-Z\\\0-9\*\_\{\}\&]+$/';
+                $error = '提示请输入正确的硬件ID格式';
+                if (!preg_match($reg, preg_quote($post['content']))) {
+                    throw new BadRequestHttpException($error, 400);
+                }
+
+                $inf_hid = new InfHid();
+                $reg = '/^(HDAUDIO\\\)(\w)*/i';
+                if (preg_match($reg, preg_quote($post['content']))) {
+                    $result = $inf_hid->HdaudioCount($post['content']);
+                    return ['data' => $result, 'message' => 'success'];
+                }
+
+                $reg = '/^(PCI\\\)(\w)*/i';
+                if (preg_match($reg, preg_quote($post['content']))) {
+                    $result = $inf_hid->PciCount($post['content']);
+                    return ['data' => $result, 'message' => 'success'];
+                }
+
+                $reg = '/^(ACPI\\\)(\w)*/i';
+                if (preg_match($reg, preg_quote($post['content']))) {
+                    $result = $inf_hid->AcpiCount($post['content']);
+                    return ['data' => $result, 'message' => 'success'];
+                }
+
+                $reg = '/^(USB\\\)(\w)*/i';
+                if (preg_match($reg, preg_quote($post['content']))) {
+                    $result = $inf_hid->UsbCount($post['content']);
+                    return ['data' => $result, 'message' => 'success'];
                 }
             }
+        } catch (\Exception $e) {
+            throw new NotFoundHttpException($e->getMessage(), 404);
+        }
 
-            //2.2 PCI\开头硬件ID，比如：PCI\VEN_8086&DEV_0412&SUBSYS_05A51028&REV_06，按&分隔符把字符串分成4部分。
-            //以PCI\VEN_8086&DEV_0412&SUBSYS_05A51028&REV_06查询，如果有结果直接返回，没有进入下一步。
-            //去掉第四部分，变成PCI\VEN_8086&DEV_0412&SUBSYS_05A51028查询，如果有结果直接返回，没有进入下一步。
-            //去掉第三部分，变成PCI\VEN_8086&DEV_0412&REV_06查询，如果有结果直接返回，没有进入下一步。
-            //去掉第三，四部分，变成PCI\VEN_8086&DEV_0412查询，如果有结果直接返回，没有就退出，显示无结果。
-            $reg = '/^(PCI\\\)(\w)*/i';
-            if (preg_match($reg, preg_quote($post['content']))) {
+        die;
+    }
+
+    public function actionSearchContent()
+    {
+        try {
+            $post = Yii::$app->getRequest()->getBodyParams();
+            if (!in_array($post['type']['type'], [1, 2])) {
+                $error = '请选择硬件ID或设备名称';
+                throw new BadRequestHttpException($error, 400);
+            }
+            if (!isset($post['content']) || !$post['content']) {
+                $error = '请输入需要搜索的内容';
+                throw new BadRequestHttpException($error, 400);
             }
 
-            //2.3 ACPI开头硬件ID，比如：ACPI\VEN_LEN&DEV_0068，做字符串替换查询数据。
-            //ACPI\VEN_LEN&DEV_0068直接查询，如果有结果直接返回，没有进入下一步。
-            //替换VEN_和&DEV_为空，形成ACPI\LEN0068查询，如果有结果直接返回，没有进入下一步。
-            //再替换ACPI\为*，形成*LEN0068查询，如果有结果直接返回，没有就退出，显示无结果。
-            //有可能输入的直接是第二步ACPI\LEN0068样式的硬件ID，直接从第二步开始即可。
-            $reg = '/^(ACPI\\\)(\w)*/i';
-            if (preg_match($reg, preg_quote($post['content']))) {
-            }
+            if (1 == $post['type']['type']) {
+                $reg = '/^[a-zA-Z\\\0-9\*\_\{\}\&]+$/';
+                $error = '提示请输入正确的硬件ID格式';
+                if (!preg_match($reg, preg_quote($post['content']))) {
+                    throw new BadRequestHttpException($error, 400);
+                }
 
-            //2.4 USB\开头硬件ID，按&分隔，替换掉REV节再查询一次。
-            //比如：USB\VID_04B4&PID_0823&REV_0101&MI_00，如果有结果直接返回，没有进入下一步。
-            //替换掉&REV_0101这个节，形成USB\VID_04B4&PID_0823&MI_00查询，如果有结果直接返回，没有就退出，显示无结果。
+                $inf_hid = new InfHid();
+                $reg = '/^(HDAUDIO\\\)(\w)*/i';
+                if (preg_match($reg, preg_quote($post['content']))) {
+                    $result = $inf_hid->HidSearch($post['content']);
 
-            //比如USB\VID_138A&PID_0090&REV_0164，如果有结果直接返回，没有进入下一步。
-            //替换掉&REV_0164这个节，形成USB\VID_138A&PID_0090查询，如果有结果直接返回，没有就退出，显示无结果。
-            $reg = '/^(USB\\\)(\w)*/i';
-            if (preg_match($reg, preg_quote($post['content']))) {
+                    $reg = '/^(PCI\\\)(\w)*/i';
+                    if (preg_match($reg, preg_quote($post['content']))) {
+                    }
+
+                    $reg = '/^(ACPI\\\)(\w)*/i';
+                    if (preg_match($reg, preg_quote($post['content']))) {
+                    }
+
+                    $reg = '/^(USB\\\)(\w)*/i';
+                    if (preg_match($reg, preg_quote($post['content']))) {
+                    }
+                }
             }
+        } catch (\Exception $e) {
+            throw new NotFoundHttpException($e->getMessage(), 404);
         }
 
         die;

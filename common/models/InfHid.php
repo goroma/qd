@@ -66,66 +66,205 @@ class InfHid extends \dbbase\models\InfHid
         return $this->hasOne(Inf::className(), ['id' => 'inf_id']);
     }
 
-    public function HdaudioSearch($hdaudio)
+    /**
+     * 2.1 HDAUDIO\开头硬件ID；比如：HDAUDIO\FUNC_01&VEN_10EC&DEV_0280&SUBSYS_102805A5&REV_1000，按&分隔符把字符串分成5部分。
+     * HDAUDIO\FUNC_01&VEN_10EC&DEV_0280&SUBSYS_102805A5&REV_1000查询，如果有结果直接返回，没有进入下一步。
+     * 去掉第五部分，变成HDAUDIO\FUNC_01&VEN_10EC&DEV_0280&SUBSYS_102805A5查询，如果有结果直接返回，没有进入下一步。
+     * 去掉第四部分，变成HDAUDIO\FUNC_01&VEN_10EC&DEV_0280&REV_1000查询，如果有结果直接返回，没有进入下一步。
+     * 去掉第四，五部分，变成HDAUDIO\FUNC_01&VEN_10EC&DEV_0280查询，如果有结果直接返回，没有就退出，显示无结果。
+     */
+    public function HdaudioCount($hid)
     {
-        $hids = 0;
-        if (substr_count($hdaudio, '&') < 2) {
+        $count = 0;
+        $new_hid = $hid;
+        if (substr_count($hid, '&') < 2) {
             throw new \Exception('没有搜索到相关结果');
         }
 
-        if (substr_count($hdaudio, '&') == 2) {
-            $hids = $this->getInfHidCountByHid($hdaudio);
-            if ($hids <= 0) {
+        if (substr_count($hid, '&') == 2) {
+            $count = $this->getInfHidCountByHid($new_hid);
+            if ($count <= 0) {
                 throw new \Exception('没有搜索到相关结果');
             }
         }
 
-        if (substr_count($hdaudio, '&') == 3) {
-            $hids = $this->getInfHidCountByHid($hdaudio);
-            if ($hids <= 0) {
-                $hdaudio_array = explode('&', $hdaudio);
-                unset($hdaudio_array[3]);
-                $hdaudio = implode('&', $hdaudio_array);
-                $hids = $this->getInfHidCountByHid($hdaudio);
-                if ($hids <= 0) {
+        if (substr_count($hid, '&') == 3) {
+            $count = $this->getInfHidCountByHid($new_hid);
+            if ($count <= 0) {
+                $new_hid = $this->getFormatString($hid, 3);
+                $count = $this->getInfHidCountByHid($new_hid);
+                if ($count <= 0) {
                     throw new \Exception('没有搜索到相关结果');
                 }
             }
         }
 
-        if (substr_count($hdaudio, '&') > 4) {
-            $pos = $this->getStrNPos($hdaudio, '&', 5);
-            $hdaudio = substr($hdaudio, 0, $pos);
+        if (substr_count($hid, '&') > 4) {
+            $pos = $this->getStrNPos($hid, '&', 5);
+            $hid = substr($hid, 0, $pos);
         }
 
-        $hids = $this->getInfHidCountByHid($hdaudio);
-        if ($hids <= 0) {
-            $hdaudio_array = explode('&', $hdaudio);
-            unset($hdaudio_array[5]);
-            $new_hdaudio = implode('&', $hdaudio_array);
-            $hids = $this->getInfHidCountByHid($new_hdaudio);
-            if ($hids <= 0) {
-                $hdaudio_array = explode('&', $hdaudio);
-                unset($hdaudio_array[4]);
-                $new_hdaudio = implode('&', $hdaudio_array);
-                $hids = $this->getInfHidCountByHid($new_hdaudio);
-                if ($hids <= 0) {
-                    $hdaudio_array = explode('&', $hdaudio);
-                    unset($hdaudio_array[5]);
-                    unset($hdaudio_array[4]);
-                    $new_hdaudio = implode('&', $hdaudio_array);
-                    $hids = $this->getInfHidCountByHid($new_hdaudio);
-                    if ($hids <= 0) {
+        $count = $this->getInfHidCountByHid($hid);
+        if ($count <= 0) {
+            $new_hid = $this->getFormatString($hid, 4);
+            $count = $this->getInfHidCountByHid($new_hid);
+            if ($count <= 0) {
+                $new_hid = $this->getFormatString($hid, 3);
+                $count = $this->getInfHidCountByHid($new_hid);
+                if ($count <= 0) {
+                    $new_hid = $this->getFormatString($hid, [4, 3]);
+                    $count = $this->getInfHidCountByHid($new_hid);
+                    if ($count <= 0) {
+                        throw new \Exception('没有搜索到相关结果');
+                    }
+                }
+            }
+        }
+        $response = [
+            'hid' => $new_hid,
+            'count' => $count,
+        ];
+
+        return $response;
+    }
+
+    /**
+     * 2.2 PCI\开头硬件ID，比如：PCI\VEN_8086&DEV_0412&SUBSYS_05A51028&REV_06，按&分隔符把字符串分成4部分。
+     * 以PCI\VEN_8086&DEV_0412&SUBSYS_05A51028&REV_06查询，如果有结果直接返回，没有进入下一步。
+     * 去掉第四部分，变成PCI\VEN_8086&DEV_0412&SUBSYS_05A51028查询，如果有结果直接返回，没有进入下一步。
+     * 去掉第三部分，变成PCI\VEN_8086&DEV_0412&REV_06查询，如果有结果直接返回，没有进入下一步。
+     * 去掉第三，四部分，变成PCI\VEN_8086&DEV_0412查询，如果有结果直接返回，没有就退出，显示无结果。
+     */
+    public function PciCount($hid)
+    {
+        $count = 0;
+        $new_hid = $hid;
+        if (substr_count($hid, '&') < 1) {
+            throw new \Exception('没有搜索到相关结果');
+        }
+
+        if (substr_count($hid, '&') == 1) {
+            $count = $this->getInfHidCountByHid($new_hid);
+            if ($count <= 0) {
+                throw new \Exception('没有搜索到相关结果');
+            }
+        }
+
+        if (substr_count($hid, '&') == 2) {
+            $count = $this->getInfHidCountByHid($new_hid);
+            if ($count <= 0) {
+                $new_hid = $this->getFormatString($hid, 2);
+                $count = $this->getInfHidCountByHid($new_hid);
+                if ($count <= 0) {
+                    throw new \Exception('没有搜索到相关结果');
+                }
+            }
+        }
+
+        if (substr_count($hid, '&') > 3) {
+            $pos = $this->getStrNPos($hid, '&', 4);
+            $hid = substr($hid, 0, $pos);
+        }
+
+        $count = $this->getInfHidCountByHid($new_hid);
+        if ($count <= 0) {
+            $new_hid = $this->getFormatString($hid, 3);
+            $count = $this->getInfHidCountByHid($new_hid);
+            if ($count <= 0) {
+                $new_hid = $this->getFormatString($hid, 2);
+                $count = $this->getInfHidCountByHid($new_hid);
+                if ($count <= 0) {
+                    $new_hid = $this->getFormatString($hid, [3, 2]);
+                    $count = $this->getInfHidCountByHid($new_hid);
+                    if ($count <= 0) {
                         throw new \Exception('没有搜索到相关结果');
                     }
                 }
             }
         }
 
-        return $hids;
+        $response = [
+            'hid' => $new_hid,
+            'count' => $count,
+        ];
+
+        return $response;
     }
 
-    public function getInfHidCountByHid($hdaudio)
+    /**
+     * 2.3 ACPI开头硬件ID，比如：ACPI\VEN_LEN&DEV_0068，做字符串替换查询数据。
+     * ACPI\VEN_LEN&DEV_0068直接查询，如果有结果直接返回，没有进入下一步。
+     * 替换VEN_和&DEV_为空，形成ACPI\LEN0068查询，如果有结果直接返回，没有进入下一步。
+     * 再替换ACPI\为*，形成*LEN0068查询，如果有结果直接返回，没有就退出，显示无结果。
+     * 有可能输入的直接是第二步ACPI\LEN0068样式的硬件ID，直接从第二步开始即可。
+     */
+    public function AcpiCount($hid)
+    {
+        $count = 0;
+        $new_hid = $hid;
+        $needle1 = 'VEN_';
+        $needle2 = '&DEV_';
+        $needle3 = 'ACPI\\';
+
+        $count = $this->getInfHidCountByHid($new_hid);
+        if ($count <= 0) {
+            if (stripos($hid, $needle1)) {
+                $new_hid = str_replace($needle1, '', $new_hid);
+            }
+            if (stripos($hid, $needle2)) {
+                $new_hid = str_replace($needle2, '', $new_hid);
+            }
+            $count = $this->getInfHidCountByHid($new_hid);
+            if ($count <= 0) {
+                $new_hid = str_replace($needle3, '*', $new_hid);
+                $count = $this->getInfHidCountByHid($new_hid);
+                if ($count <= 0) {
+                    throw new \Exception('没有搜索到相关结果');
+                }
+            }
+        }
+
+        $response = [
+            'hid' => $new_hid,
+            'count' => $count,
+        ];
+
+        return $response;
+    }
+
+    /**
+     * 2.4 USB\开头硬件ID，按&分隔，替换掉REV节再查询一次。
+     * 比如：USB\VID_04B4&PID_0823&REV_0101&MI_00，如果有结果直接返回，没有进入下一步。
+     * 替换掉&REV_0101这个节，形成USB\VID_04B4&PID_0823&MI_00查询，如果有结果直接返回，没有就退出，显示无结果。
+     * 比如USB\VID_138A&PID_0090&REV_0164，如果有结果直接返回，没有进入下一步。
+     * 替换掉&REV_0164这个节，形成USB\VID_138A&PID_0090查询，如果有结果直接返回，没有就退出，显示无结果。
+     */
+    public function UsbCount($hid)
+    {
+        $count = 0;
+        $new_hid = $hid;
+        $needle = '&REV_';
+
+        $count = $this->getInfHidCountByHid($new_hid);
+        if ($count <= 0) {
+            if (stripos($hid, $needle)) {
+                //preg_replace();
+            }
+        }
+
+        $response = [
+            'hid' => $new_hid,
+            'count' => $count,
+        ];
+
+        return $response;
+    }
+
+    public function HidSearch($hid)
+    {
+    }
+
+    public function getInfHidCountByHid($hid)
     {
         //echo self::find()
             //->select(self::tableName().'.*')
@@ -133,13 +272,22 @@ class InfHid extends \dbbase\models\InfHid
             //->joinWith(['driver d'])
             //->joinWith(['oses ds'])
             //->where(['d.is_del' => Driver::NOT_DEL])
-            //->andWhere(['hid' => $hdaudio])
+            //->andWhere(['hid' => $hid])
             //->createCommand()->getRawSql();
         return self::find()
             ->select(self::tableName().'.*')
             ->joinWith(['driver d'])
-            ->andWhere(['hid' => $hdaudio])
+            ->andWhere(['hid' => $hid])
             ->count();
+    }
+
+    public function getInfHidByHid($hid)
+    {
+        return self::find()
+            ->select(self::tableName().'.*')
+            ->joinWith(['driver d'])
+            ->andWhere(['hid' => $hid])
+            ->all();
     }
 
     public function getStrNPos($str, $needle, $num)
@@ -151,5 +299,28 @@ class InfHid extends \dbbase\models\InfHid
         }
 
         return $n;
+    }
+
+    /**
+     * 获取处理后的硬件ID字符串.
+     *
+     * @param string $hid    硬件ID
+     * @param mix    $num    处理指针
+     * @param string $needle 分割字符
+     *
+     * @return string $hid
+     */
+    public function getFormatString($hid, $num, $needle = '&')
+    {
+        $hid_array = explode($needle, $hid);
+        if (is_numeric($num)) {
+            unset($hid_array[$num]);
+        } elseif (is_array($num) && $num) {
+            foreach ($num as $value) {
+                unset($hid_array[$value]);
+            }
+        }
+
+        return implode($needle, $hid_array);
     }
 }
