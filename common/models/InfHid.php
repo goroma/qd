@@ -52,6 +52,15 @@ class InfHid extends \dbbase\models\InfHid
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getOses()
+    {
+        return $this->hasMany(DriverOs::className(), ['driver_id' => 'id'])
+            ->via('driver');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getInf()
     {
         return $this->hasOne(Inf::className(), ['id' => 'inf_id']);
@@ -59,8 +68,29 @@ class InfHid extends \dbbase\models\InfHid
 
     public function HdaudioSearch($hdaudio)
     {
+        $hids = 0;
         if (substr_count($hdaudio, '&') < 2) {
             throw new \Exception('没有搜索到相关结果');
+        }
+
+        if (substr_count($hdaudio, '&') == 2) {
+            $hids = $this->getInfHidCountByHid($hdaudio);
+            if ($hids <= 0) {
+                throw new \Exception('没有搜索到相关结果');
+            }
+        }
+
+        if (substr_count($hdaudio, '&') == 3) {
+            $hids = $this->getInfHidCountByHid($hdaudio);
+            if ($hids <= 0) {
+                $hdaudio_array = explode('&', $hdaudio);
+                unset($hdaudio_array[3]);
+                $hdaudio = implode('&', $hdaudio_array);
+                $hids = $this->getInfHidCountByHid($hdaudio);
+                if ($hids <= 0) {
+                    throw new \Exception('没有搜索到相关结果');
+                }
+            }
         }
 
         if (substr_count($hdaudio, '&') > 4) {
@@ -68,17 +98,48 @@ class InfHid extends \dbbase\models\InfHid
             $hdaudio = substr($hdaudio, 0, $pos);
         }
 
-        $hids = self::find()
-            ->select(self::tableName().'.*')
-            ->joinWith([Driver::tableName.' d'])
-            ->where(['d.is_del' => Driver::NOT_DEL])
-            ->andWhere(['inf_id' => $hdaudio])
-            ->all();
-
-        if (!$hids) {
+        $hids = $this->getInfHidCountByHid($hdaudio);
+        if ($hids <= 0) {
             $hdaudio_array = explode('&', $hdaudio);
+            unset($hdaudio_array[5]);
+            $new_hdaudio = implode('&', $hdaudio_array);
+            $hids = $this->getInfHidCountByHid($new_hdaudio);
+            if ($hids <= 0) {
+                $hdaudio_array = explode('&', $hdaudio);
+                unset($hdaudio_array[4]);
+                $new_hdaudio = implode('&', $hdaudio_array);
+                $hids = $this->getInfHidCountByHid($new_hdaudio);
+                if ($hids <= 0) {
+                    $hdaudio_array = explode('&', $hdaudio);
+                    unset($hdaudio_array[5]);
+                    unset($hdaudio_array[4]);
+                    $new_hdaudio = implode('&', $hdaudio_array);
+                    $hids = $this->getInfHidCountByHid($new_hdaudio);
+                    if ($hids <= 0) {
+                        throw new \Exception('没有搜索到相关结果');
+                    }
+                }
+            }
         }
-        die;
+
+        return $hids;
+    }
+
+    public function getInfHidCountByHid($hdaudio)
+    {
+        //echo self::find()
+            //->select(self::tableName().'.*')
+            //->select(self::tableName().'.*, '.Driver::tableName().'.*, ds.*')
+            //->joinWith(['driver d'])
+            //->joinWith(['oses ds'])
+            //->where(['d.is_del' => Driver::NOT_DEL])
+            //->andWhere(['hid' => $hdaudio])
+            //->createCommand()->getRawSql();
+        return self::find()
+            ->select(self::tableName().'.*')
+            ->joinWith(['driver d'])
+            ->andWhere(['hid' => $hdaudio])
+            ->count();
     }
 
     public function getStrNPos($str, $needle, $num)

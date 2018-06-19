@@ -21,7 +21,7 @@ define(function (require) {
                 ]
             }).
             state('list', {
-                url: '/list',
+                url: '/list/:search',
                 templateUrl: 'templates/home/list.html',
                 controllerUrl: 'js/home/ListController',
                 controller: 'ListController',

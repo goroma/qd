@@ -235,8 +235,9 @@ class ApiController extends Controller
             $reg = '/^(HDAUDIO\\\)(\w)*/i';
             if (preg_match($reg, preg_quote($post['content']))) {
                 $result = $inf_hid->HdaudioSearch($post['content']);
-                var_dump('asfafds');
-                die;
+                if ($result) {
+                    return ['count' => $result, 'message' => 'success'];
+                }
             }
 
             //2.2 PCI\开头硬件ID，比如：PCI\VEN_8086&DEV_0412&SUBSYS_05A51028&REV_06，按&分隔符把字符串分成4部分。

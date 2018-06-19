@@ -1,8 +1,8 @@
 define(function (require) {
     var app = require('../app');
 
-    app.controller('HomeController', ['$scope', '$location', '$http', '$window',
-            function ($scope, $location, $http, $window) {
+    app.controller('HomeController', ['$scope', '$location', '$http', '$state',
+            function ($scope, $location, $http, $state) {
                 $scope.types = [
                     {name : "硬件ID", type : 1},
                     {name : "设备名称", type : 2}
@@ -13,9 +13,11 @@ define(function (require) {
                     $scope.error = '';
 
                     $http.post('api/search', $scope.searchModel).success(
-                    //$http.post('api/login', $scope.searchModel).success(
                             function (data) {
-                                console.log(data);
+                                if (data.count > 0) {
+                                    $state.go('list', {search: JSON.stringify($scope.searchModel)});
+                                }
+                                //console.log(data);
                                 //$window.sessionStorage.access_token = data.access_token;
                                 //$location.path('/list').replace();
                             }).error(
