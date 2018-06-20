@@ -133,6 +133,7 @@ class ApiController extends Controller
                 throw new BadRequestHttpException($error, 400);
             }
 
+            $inf_hid = new InfHid();
             if (1 == $post['type']['type']) {
                 $reg = '/^[a-zA-Z\\\0-9\*\_\{\}\&]+$/';
                 $error = '提示请输入正确的硬件ID格式';
@@ -140,36 +141,17 @@ class ApiController extends Controller
                     throw new BadRequestHttpException($error, 400);
                 }
 
-                $inf_hid = new InfHid();
-                $reg = '/^(HDAUDIO\\\)(\w)*/i';
-                if (preg_match($reg, preg_quote($post['content']))) {
-                    $result = $inf_hid->HdaudioCount($post['content']);
-                    return ['data' => $result, 'message' => 'success'];
-                }
+                $result = $inf_hid->getHidCount($post['content']);
 
-                $reg = '/^(PCI\\\)(\w)*/i';
-                if (preg_match($reg, preg_quote($post['content']))) {
-                    $result = $inf_hid->PciCount($post['content']);
-                    return ['data' => $result, 'message' => 'success'];
-                }
+                return ['data' => $result, 'message' => 'success'];
+            } else {
+                $result = $inf_hid->HidNameCount($post['content']);
 
-                $reg = '/^(ACPI\\\)(\w)*/i';
-                if (preg_match($reg, preg_quote($post['content']))) {
-                    $result = $inf_hid->AcpiCount($post['content']);
-                    return ['data' => $result, 'message' => 'success'];
-                }
-
-                $reg = '/^(USB\\\)(\w)*/i';
-                if (preg_match($reg, preg_quote($post['content']))) {
-                    $result = $inf_hid->UsbCount($post['content']);
-                    return ['data' => $result, 'message' => 'success'];
-                }
+                return ['data' => $result, 'message' => 'success'];
             }
         } catch (\Exception $e) {
             throw new NotFoundHttpException($e->getMessage(), 404);
         }
-
-        die;
     }
 
     public function actionSearchContent()
@@ -185,6 +167,7 @@ class ApiController extends Controller
                 throw new BadRequestHttpException($error, 400);
             }
 
+            $inf_hid = new InfHid();
             if (1 == $post['type']['type']) {
                 $reg = '/^[a-zA-Z\\\0-9\*\_\{\}\&]+$/';
                 $error = '提示请输入正确的硬件ID格式';
@@ -192,28 +175,16 @@ class ApiController extends Controller
                     throw new BadRequestHttpException($error, 400);
                 }
 
-                $inf_hid = new InfHid();
-                $reg = '/^(HDAUDIO\\\)(\w)*/i';
-                if (preg_match($reg, preg_quote($post['content']))) {
-                    $result = $inf_hid->HidSearch($post['content']);
+                $result = $inf_hid->HidSearch($post['content']);
 
-                    $reg = '/^(PCI\\\)(\w)*/i';
-                    if (preg_match($reg, preg_quote($post['content']))) {
-                    }
+                return ['data' => $result, 'message' => 'success'];
+            } else {
+                $result = $inf_hid->HidNameCount($post['content']);
 
-                    $reg = '/^(ACPI\\\)(\w)*/i';
-                    if (preg_match($reg, preg_quote($post['content']))) {
-                    }
-
-                    $reg = '/^(USB\\\)(\w)*/i';
-                    if (preg_match($reg, preg_quote($post['content']))) {
-                    }
-                }
+                return ['data' => $result, 'message' => 'success'];
             }
         } catch (\Exception $e) {
             throw new NotFoundHttpException($e->getMessage(), 404);
         }
-
-        die;
     }
 }

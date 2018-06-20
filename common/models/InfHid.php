@@ -66,6 +66,35 @@ class InfHid extends \dbbase\models\InfHid
         return $this->hasOne(Inf::className(), ['id' => 'inf_id']);
     }
 
+    public function getHidCount($hid)
+    {
+        $response = [
+            'hid' => $hid,
+            'count' => 0,
+        ];
+        $reg = '/^(HDAUDIO\\\)(\w)*/i';
+        if (preg_match($reg, preg_quote($hid))) {
+            $response = $this->HdaudioCount($hid);
+        }
+
+        $reg = '/^(PCI\\\)(\w)*/i';
+        if (preg_match($reg, preg_quote($hid))) {
+            $response = $this->PciCount($hid);
+        }
+
+        $reg = '/^(ACPI\\\)(\w)*/i';
+        if (preg_match($reg, preg_quote($hid))) {
+            $response = $this->AcpiCount($hid);
+        }
+
+        $reg = '/^(USB\\\)(\w)*/i';
+        if (preg_match($reg, preg_quote($hid))) {
+            $response = $this->UsbCount($hid);
+        }
+
+        return $response;
+    }
+
     /**
      * 2.1 HDAUDIO\开头硬件ID；比如：HDAUDIO\FUNC_01&VEN_10EC&DEV_0280&SUBSYS_102805A5&REV_1000，按&分隔符把字符串分成5部分。
      * HDAUDIO\FUNC_01&VEN_10EC&DEV_0280&SUBSYS_102805A5&REV_1000查询，如果有结果直接返回，没有进入下一步。
@@ -82,17 +111,17 @@ class InfHid extends \dbbase\models\InfHid
         }
 
         if (substr_count($hid, '&') == 2) {
-            $count = $this->getInfHidCountByHid($new_hid);
+            $count = $this->getInfHidCount($new_hid);
             if ($count <= 0) {
                 throw new \Exception('没有搜索到相关结果');
             }
         }
 
         if (substr_count($hid, '&') == 3) {
-            $count = $this->getInfHidCountByHid($new_hid);
+            $count = $this->getInfHidCount($new_hid);
             if ($count <= 0) {
                 $new_hid = $this->getFormatString($hid, 3);
-                $count = $this->getInfHidCountByHid($new_hid);
+                $count = $this->getInfHidCount($new_hid);
                 if ($count <= 0) {
                     throw new \Exception('没有搜索到相关结果');
                 }
@@ -104,16 +133,16 @@ class InfHid extends \dbbase\models\InfHid
             $hid = substr($hid, 0, $pos);
         }
 
-        $count = $this->getInfHidCountByHid($hid);
+        $count = $this->getInfHidCount($hid);
         if ($count <= 0) {
             $new_hid = $this->getFormatString($hid, 4);
-            $count = $this->getInfHidCountByHid($new_hid);
+            $count = $this->getInfHidCount($new_hid);
             if ($count <= 0) {
                 $new_hid = $this->getFormatString($hid, 3);
-                $count = $this->getInfHidCountByHid($new_hid);
+                $count = $this->getInfHidCount($new_hid);
                 if ($count <= 0) {
                     $new_hid = $this->getFormatString($hid, [4, 3]);
-                    $count = $this->getInfHidCountByHid($new_hid);
+                    $count = $this->getInfHidCount($new_hid);
                     if ($count <= 0) {
                         throw new \Exception('没有搜索到相关结果');
                     }
@@ -144,17 +173,17 @@ class InfHid extends \dbbase\models\InfHid
         }
 
         if (substr_count($hid, '&') == 1) {
-            $count = $this->getInfHidCountByHid($new_hid);
+            $count = $this->getInfHidCount($new_hid);
             if ($count <= 0) {
                 throw new \Exception('没有搜索到相关结果');
             }
         }
 
         if (substr_count($hid, '&') == 2) {
-            $count = $this->getInfHidCountByHid($new_hid);
+            $count = $this->getInfHidCount($new_hid);
             if ($count <= 0) {
                 $new_hid = $this->getFormatString($hid, 2);
-                $count = $this->getInfHidCountByHid($new_hid);
+                $count = $this->getInfHidCount($new_hid);
                 if ($count <= 0) {
                     throw new \Exception('没有搜索到相关结果');
                 }
@@ -166,16 +195,16 @@ class InfHid extends \dbbase\models\InfHid
             $hid = substr($hid, 0, $pos);
         }
 
-        $count = $this->getInfHidCountByHid($new_hid);
+        $count = $this->getInfHidCount($new_hid);
         if ($count <= 0) {
             $new_hid = $this->getFormatString($hid, 3);
-            $count = $this->getInfHidCountByHid($new_hid);
+            $count = $this->getInfHidCount($new_hid);
             if ($count <= 0) {
                 $new_hid = $this->getFormatString($hid, 2);
-                $count = $this->getInfHidCountByHid($new_hid);
+                $count = $this->getInfHidCount($new_hid);
                 if ($count <= 0) {
                     $new_hid = $this->getFormatString($hid, [3, 2]);
-                    $count = $this->getInfHidCountByHid($new_hid);
+                    $count = $this->getInfHidCount($new_hid);
                     if ($count <= 0) {
                         throw new \Exception('没有搜索到相关结果');
                     }
@@ -206,7 +235,7 @@ class InfHid extends \dbbase\models\InfHid
         $needle2 = '&DEV_';
         $needle3 = 'ACPI\\';
 
-        $count = $this->getInfHidCountByHid($new_hid);
+        $count = $this->getInfHidCount($new_hid);
         if ($count <= 0) {
             if (stripos($hid, $needle1)) {
                 $new_hid = str_replace($needle1, '', $new_hid);
@@ -214,10 +243,10 @@ class InfHid extends \dbbase\models\InfHid
             if (stripos($hid, $needle2)) {
                 $new_hid = str_replace($needle2, '', $new_hid);
             }
-            $count = $this->getInfHidCountByHid($new_hid);
+            $count = $this->getInfHidCount($new_hid);
             if ($count <= 0) {
                 $new_hid = str_replace($needle3, '*', $new_hid);
-                $count = $this->getInfHidCountByHid($new_hid);
+                $count = $this->getInfHidCount($new_hid);
                 if ($count <= 0) {
                     throw new \Exception('没有搜索到相关结果');
                 }
@@ -245,12 +274,12 @@ class InfHid extends \dbbase\models\InfHid
         $new_hid = $hid;
         $needle = '&REV_';
 
-        $count = $this->getInfHidCountByHid($new_hid);
+        $count = $this->getInfHidCount($new_hid);
         if ($count <= 0) {
             if (stripos($hid, $needle)) {
                 $pattern = '/(&REV_)(\w)*/i';
                 $new_hid = preg_replace($pattern, '', $new_hid);
-                $count = $this->getInfHidCountByHid($new_hid);
+                $count = $this->getInfHidCount($new_hid);
                 if ($count <= 0) {
                     throw new \Exception('没有搜索到相关结果');
                 }
@@ -267,11 +296,47 @@ class InfHid extends \dbbase\models\InfHid
         return $response;
     }
 
-    public function HidSearch($hid)
+    public function HidNameCount($hid_name)
     {
+        $count = $this->getInfHidCount($hid_name, $type = 1);
+
+        $response = [
+            'hid' => $hid_name,
+            'count' => $count,
+        ];
+
+        return $response;
     }
 
-    public function getInfHidCountByHid($hid)
+    public function HidSearch($hid)
+    {
+        $response = [
+            'hid' => $hid,
+            'count' => 0,
+            'match_hid' => '',
+            'hids' => [
+            ],
+        ];
+
+        $res = $this->getHidCount($hid);
+
+        if ($res['count'] > 0) {
+            $query = self::find()
+                ->select(self::tableName().'.*')
+                ->joinWith(['driver d']);
+            $query->andWhere(['hid' => $hid]);
+            $hids = $query->all();
+        }
+
+        $response = [
+            'hid' => $res['hid'],
+            'count' => $res['count'],
+        ];
+
+        return $response;
+    }
+
+    public function getInfHidCount($hid, $type = 0)
     {
         //echo self::find()
             //->select(self::tableName().'.*')
@@ -281,11 +346,18 @@ class InfHid extends \dbbase\models\InfHid
             //->where(['d.is_del' => Driver::NOT_DEL])
             //->andWhere(['hid' => $hid])
             //->createCommand()->getRawSql();
-        return self::find()
-            ->select(self::tableName().'.*')
-            ->joinWith(['driver d'])
-            ->andWhere(['hid' => $hid])
-            ->count();
+
+        $query = self::find()
+                ->select(self::tableName().'.*')
+                ->joinWith(['driver d']);
+
+        if ($type) {
+            $query->andWhere(['like', 'hid_name', $hid]);
+        } else {
+            $query->andWhere(['hid' => $hid]);
+        }
+
+        return $query->count();
     }
 
     public function getInfHidByHid($hid)
