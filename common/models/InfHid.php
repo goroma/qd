@@ -248,7 +248,14 @@ class InfHid extends \dbbase\models\InfHid
         $count = $this->getInfHidCountByHid($new_hid);
         if ($count <= 0) {
             if (stripos($hid, $needle)) {
-                //preg_replace();
+                $pattern = '/(&REV_)(\w)*/i';
+                $new_hid = preg_replace($pattern, '', $new_hid);
+                $count = $this->getInfHidCountByHid($new_hid);
+                if ($count <= 0) {
+                    throw new \Exception('没有搜索到相关结果');
+                }
+            } else {
+                throw new \Exception('没有搜索到相关结果');
             }
         }
 

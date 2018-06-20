@@ -16,15 +16,26 @@ define(function (require) {
                         $scope.default_type = data;
                     }
                 });
+                $scope.searchModel.type = $scope.search.type;
 
-                $http.post('api/search-content', $scope.searchModel).success(
-                    function (data) {
+                $http.post('api/search-content', $scope.searchModel).success(function (data) {
+                    console.log(data);
+                }).error(function (data) {
+                    $scope.error = data.message;
+                });
+
+                $scope.search = function () {
+                    $scope.error = '';
+
+                    $http.post('api/search-content', $scope.searchModel).success(function (data) {
+                        //if (data.data.count > 0) {
                         console.log(data);
-                    }).error(
-                        function (data) {
-                            $scope.error = data.message;
-                        }
-                    );
+                        //$state.go('list', {search: JSON.stringify($scope.searchModel)});
+                        //}
+                    }).error(function (data) {
+                        $scope.error = data.message;
+                    });
+                };
 
                 $scope.toDownload = function toDownload(hash) {
                     console.log('download');

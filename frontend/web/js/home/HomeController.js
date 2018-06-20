@@ -12,19 +12,17 @@ define(function (require) {
             $scope.search = function () {
                 $scope.error = '';
 
-                $http.post('api/search', $scope.searchModel).success(
-                    function (data) {
-                        if (data.data.count > 0) {
-                            console.log(data);
-                            $state.go('list', {search: JSON.stringify($scope.searchModel)});
-                        }
-                    }).error(
-                        function (data) {
-                            $scope.error = data.message;
-                        }
-                    );
+                $http.post('api/search', $scope.searchModel).success(function (data) {
+                    if (data.data.count > 0) {
+                        console.log(data);
+                        $state.go('list', {search: JSON.stringify($scope.searchModel)});
+                    } else {
+                        $scope.error = '没有搜索到相关结果';
+                    }
+                }).error(function (data) {
+                    $scope.error = data.message;
+                });
             };
-
         }
     ]);
 });
