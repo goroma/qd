@@ -5,6 +5,10 @@ define(function (require) {
             function ($scope, $http, $state, $stateParams) {
                 $scope.search = JSON.parse($stateParams.search);
 
+                $scope.match_hid = '';
+                $scope.count = '';
+                $scope.hids = [];
+
                 $scope.types = [
                     {name : "硬件ID", type : 1},
                     {name : "设备名称", type : 2}
@@ -20,7 +24,12 @@ define(function (require) {
 
                 $http.post('api/search-content', $scope.searchModel).success(function (data) {
                     console.log(data);
+                    var response = data.data;
+                    $scope.match_hid = response.match_hid;
+                    $scope.count = response.count;
+                    $scope.hids = response.hids;
                 }).error(function (data) {
+                    $scope.count = 0;
                     $scope.error = data.message;
                 });
 
@@ -30,9 +39,14 @@ define(function (require) {
                     $http.post('api/search-content', $scope.searchModel).success(function (data) {
                         //if (data.data.count > 0) {
                         console.log(data);
+                        var response = data.data;
+                        $scope.match_hid = response.match_hid;
+                        $scope.count = response.count;
+                        $scope.hids = response.hids;
                         //$state.go('list', {search: JSON.stringify($scope.searchModel)});
                         //}
                     }).error(function (data) {
+                        $scope.count = 0;
                         $scope.error = data.message;
                     });
                 };

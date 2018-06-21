@@ -74,22 +74,22 @@ class InfHid extends \dbbase\models\InfHid
         ];
         $reg = '/^(HDAUDIO\\\)(\w)*/i';
         if (preg_match($reg, preg_quote($hid))) {
-            $response = $this->HdaudioCount($hid);
+            $response = $this->hdaudioCount($hid);
         }
 
         $reg = '/^(PCI\\\)(\w)*/i';
         if (preg_match($reg, preg_quote($hid))) {
-            $response = $this->PciCount($hid);
+            $response = $this->pciCount($hid);
         }
 
         $reg = '/^(ACPI\\\)(\w)*/i';
         if (preg_match($reg, preg_quote($hid))) {
-            $response = $this->AcpiCount($hid);
+            $response = $this->acpiCount($hid);
         }
 
         $reg = '/^(USB\\\)(\w)*/i';
         if (preg_match($reg, preg_quote($hid))) {
-            $response = $this->UsbCount($hid);
+            $response = $this->usbCount($hid);
         }
 
         return $response;
@@ -102,7 +102,7 @@ class InfHid extends \dbbase\models\InfHid
      * 去掉第四部分，变成HDAUDIO\FUNC_01&VEN_10EC&DEV_0280&REV_1000查询，如果有结果直接返回，没有进入下一步。
      * 去掉第四，五部分，变成HDAUDIO\FUNC_01&VEN_10EC&DEV_0280查询，如果有结果直接返回，没有就退出，显示无结果。
      */
-    public function HdaudioCount($hid)
+    public function hdaudioCount($hid)
     {
         $count = 0;
         $new_hid = $hid;
@@ -164,7 +164,7 @@ class InfHid extends \dbbase\models\InfHid
      * 去掉第三部分，变成PCI\VEN_8086&DEV_0412&REV_06查询，如果有结果直接返回，没有进入下一步。
      * 去掉第三，四部分，变成PCI\VEN_8086&DEV_0412查询，如果有结果直接返回，没有就退出，显示无结果。
      */
-    public function PciCount($hid)
+    public function pciCount($hid)
     {
         $count = 0;
         $new_hid = $hid;
@@ -227,7 +227,7 @@ class InfHid extends \dbbase\models\InfHid
      * 再替换ACPI\为*，形成*LEN0068查询，如果有结果直接返回，没有就退出，显示无结果。
      * 有可能输入的直接是第二步ACPI\LEN0068样式的硬件ID，直接从第二步开始即可。
      */
-    public function AcpiCount($hid)
+    public function acpiCount($hid)
     {
         $count = 0;
         $new_hid = $hid;
@@ -268,7 +268,7 @@ class InfHid extends \dbbase\models\InfHid
      * 比如USB\VID_138A&PID_0090&REV_0164，如果有结果直接返回，没有进入下一步。
      * 替换掉&REV_0164这个节，形成USB\VID_138A&PID_0090查询，如果有结果直接返回，没有就退出，显示无结果。
      */
-    public function UsbCount($hid)
+    public function usbCount($hid)
     {
         $count = 0;
         $new_hid = $hid;
@@ -296,7 +296,7 @@ class InfHid extends \dbbase\models\InfHid
         return $response;
     }
 
-    public function HidNameCount($hid_name)
+    public function hidNameCount($hid_name)
     {
         $count = $this->getInfHidCount($hid_name, $type = 1);
 
@@ -308,14 +308,27 @@ class InfHid extends \dbbase\models\InfHid
         return $response;
     }
 
-    public function HidSearch($hid)
+    public function hidSearch($hid)
     {
         $response = [
             'hid' => $hid,
             'count' => 0,
             'match_hid' => '',
-            'hids' => [
-            ],
+            'hids' => [],
+        ];
+        $inf_hid = [
+            'hid_name' => '',
+            'driver_ver' => '',
+            'driver_original_pubtime' => '',
+            'qd_file_size' => '',
+            'class' => '',
+            'language' => '',
+            'qd_install_type' => '',
+            'qd_instruction' => '',
+            'qd_os' => [],
+            'qd_os_array' => [],
+            'qd_os_string' => '',
+            'hash' => '',
         ];
 
         $res = $this->getHidCount($hid);
@@ -324,14 +337,37 @@ class InfHid extends \dbbase\models\InfHid
             $query = self::find()
                 ->select(self::tableName().'.*')
                 ->joinWith(['driver d']);
-            $query->andWhere(['hid' => $hid]);
-            $hids = $query->all();
+            $query->andWhere(['hid' => $res['hid']]);
+            $inf_hids = $query->all();
+
+            if ($inf_hids) {
+                foreach ($inf_hids as $hid) {
+                    $qd_os = [];
+                    $qd_os_array = [];
+                    $inf_hid['hid_name'] = $hid->hid_name;
+                    $inf_hid['driver_ver'] = $hid->inf->driver_ver;
+                    $inf_hid['driver_original_pubtime'] = $hid->inf->driver_original_pubtime;
+                    $inf_hid['qd_file_size'] = ceil($hid->driver->qd_file_size > 0 ? ($hid->driver->qd_file_size / 1024) : 0).'KB';
+                    $inf_hid['class'] = $hid->inf->class;
+                    $inf_hid['language'] = $hid->driver->language;
+                    $inf_hid['qd_install_type'] = Driver::$install_type[$hid->driver->qd_install_type];
+                    $inf_hid['qd_instruction'] = $hid->driver->qd_instruction;
+                    $inf_hid['hash'] = $hid->driver->qd_sha256;
+                    $oses = $hid->driver->oses;
+                    foreach ($oses as $os) {
+                        $qd_os[$os->qd_pf][] = $os->qd_os;
+                        $qd_os_array[] = $os->qd_os;
+                    }
+                    $inf_hid['qd_os'] = $qd_os;
+                    $inf_hid['qd_os_array'] = array_values(array_unique($qd_os_array));
+                    $inf_hid['qd_os_string'] = implode(',', array_unique($qd_os_array));
+                    $response['hids'][] = $inf_hid;
+                }
+            }
         }
 
-        $response = [
-            'hid' => $res['hid'],
-            'count' => $res['count'],
-        ];
+        $response['match_hid'] = $res['hid'];
+        $response['count'] = $res['count'];
 
         return $response;
     }

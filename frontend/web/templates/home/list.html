@@ -20,10 +20,16 @@
             </form>
         </div>
 
-        <h5 class="page-header"></h5>
-
         <div class="row">
-            <div class="col-md-7">匹配硬件ID：PCI\VEN_10EC&DEV_8169&SUBSYS_04CCA0A0 共找到xx个结果。</div>
+            <div class="row col-md-offset-3" style="margin-top: 10px;">
+                {{ error }}
+            </div>
+        </div>
+
+        <h5 class="page-header" ng-show="count"></h5>
+
+        <div class="row" ng-show="count > 0">
+            <div class="col-md-7">匹配硬件ID：{{ match_hid }} 共找到{{ count }}个结果。</div>
             <div class="col-md-5">
                 <div class="col-md-3" style="margin: 0; padding: 0;">
                     操作系统过滤
@@ -47,55 +53,57 @@
             </div>
         </div>
 
-        <h5 class="page-header"></h5>
+        <h5 class="page-header" ng-show="count"></h5>
 
-        <div class="row">
-            <div class="col-md-12">
-                设备名称： Realtek PCI GBE Family Controller
+        <div ng-show="count" ng-repeat="hid in hids">
+            <div class="row">
+                <div class="col-md-12">
+                    设备名称： {{ hid.hid_name }}
+                </div>
             </div>
-        </div>
 
-        <div class="row" style="margin-top: 5px;">
-            <div class="col-md-3">
-                驱动版本： 7.089.0716.2014
+            <div class="row" style="margin-top: 5px;">
+                <div class="col-md-3">
+                    驱动版本： {{ hid.driver_ver }}
+                </div>
+                <div class="col-md-3">
+                    驱动日期：{{ hid.driver_original_pubtime }}
+                </div>
+                <div class="col-md-4">
+                    驱动大小： {{ hid.qd_file_size }}
+                </div>
             </div>
-            <div class="col-md-3">
-                驱动日期：07/16/2014
-            </div>
-            <div class="col-md-4">
-                驱动大小： 486KB
-            </div>
-        </div>
 
-        <div class="row" style="margin-top: 5px;">
-            <div class="col-md-3">
-                驱动类型：Net
+            <div class="row" style="margin-top: 5px;">
+                <div class="col-md-3">
+                    驱动类型：{{ hid.class }}
+                </div>
+                <div class="col-md-3">
+                    驱动语言： {{ hid.language }}
+                </div>
+                <div class="col-md-4">
+                    安装方式： {{ hid.qd_install_type }}
+                </div>
             </div>
-            <div class="col-md-3">
-                驱动语言： 全球多语言
-            </div>
-            <div class="col-md-4">
-                安装方式： 直接运行EXE安装
-            </div>
-        </div>
 
-        <div class="row" style="margin-top: 5px;">
-            <div class="col-md-12">
-                驱动说明：网卡驱动
+            <div class="row" style="margin-top: 5px;">
+                <div class="col-md-12">
+                    驱动说明：{{ hid.qd_instruction }}
+                </div>
             </div>
-        </div>
 
-        <div class="row" style="margin-top: 5px;">
-            <div class="col-md-12">
-                支持操作系统：WinXP，Win2003，Win7，Win8，Win8.1，Win10
+            <div class="row" style="margin-top: 5px;">
+                <div class="col-md-12">
+                    支持操作系统：{{ hid.qd_os_string }}
+                </div>
             </div>
-        </div>
 
-        <div class="row" style="margin-top: 5px;">
-            <div class="col-md-12">
-                下载地址：<a type="button" class="btn btn-link" ng-click="toDownload('hash')">点击下载</a>
+            <div class="row" style="margin-top: 5px;">
+                <div class="col-md-12">
+                    下载地址：<a type="button" class="btn btn-link" ng-click="toDownload(hid.hash)">点击下载</a>
+                </div>
             </div>
+            <hr style="border:#d8d4d4 0.3px dashed;">
         </div>
-        <hr style="border:#d8d4d4 0.3px dashed;">
     </div>
 </div>

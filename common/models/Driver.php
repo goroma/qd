@@ -72,4 +72,32 @@ class Driver extends \dbbase\models\Driver
     {
         return $this->hasMany(Inf::className(), ['driver_id' => 'id']);
     }
+
+    public function driverSearchHash($hash)
+    {
+        $response = [
+            'qd_name' => '',
+            'qd_file_size' => '',
+            'hash' => '',
+            'qd_install_type' => '',
+            'qd_instruction' => '',
+            'qd_download_url' => [],
+        ];
+        $driver = Driver::findOne([
+            'qd_sha256' => $hash,
+            'is_del' => Driver::NOT_DEL,
+        ]);
+        if (!$driver) {
+            throw new \Exception('驱动不存在,请重新搜索');
+        }
+
+        $response['qd_name'] = $driver->qd_name;
+        $response['qd_file_size'] = ceil($driver->qd_file_size > 0 ? ($driver->qd_file_size / 1024) : 0).'KB';
+        $response['hash'] = $driver->qd_sha256;
+        $response['qd_install_type'] = Driver::$install_type[$driver->qd_install_type];
+        $response['qd_instruction'] = $driver->qd_instruction;
+        $response['qd_download_url'] = explode(',', $driver->qd_download_url);
+
+        return $response;
+    }
 }

@@ -10,6 +10,7 @@ use yii\filters\auth\HttpBearerAuth;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 
+use common\models\Driver;
 use common\models\InfHid;
 
 use common\models\LoginForm;
@@ -145,7 +146,7 @@ class ApiController extends Controller
 
                 return ['data' => $result, 'message' => 'success'];
             } else {
-                $result = $inf_hid->HidNameCount($post['content']);
+                $result = $inf_hid->hidNameCount($post['content']);
 
                 return ['data' => $result, 'message' => 'success'];
             }
@@ -175,14 +176,27 @@ class ApiController extends Controller
                     throw new BadRequestHttpException($error, 400);
                 }
 
-                $result = $inf_hid->HidSearch($post['content']);
+                $result = $inf_hid->hidSearch($post['content']);
 
                 return ['data' => $result, 'message' => 'success'];
             } else {
-                $result = $inf_hid->HidNameCount($post['content']);
+                $result = $inf_hid->hidNameCount($post['content']);
 
                 return ['data' => $result, 'message' => 'success'];
             }
+        } catch (\Exception $e) {
+            throw new NotFoundHttpException($e->getMessage(), 404);
+        }
+    }
+
+    public function actionSearchHash()
+    {
+        try {
+            $post = Yii::$app->getRequest()->getBodyParams();
+            $driver = new Driver();
+            $result = $driver->driverSearchHash($post['hash']);
+
+            return ['data' => $result, 'message' => 'success'];
         } catch (\Exception $e) {
             throw new NotFoundHttpException($e->getMessage(), 404);
         }
