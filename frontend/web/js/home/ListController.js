@@ -31,10 +31,11 @@ define(function (require) {
                     $scope.count = response.count;
                     $scope.hids = response.hids;
                     if ($scope.count <= 0) {
+                        $scope.count = false;
                         $scope.error = '没有搜索到相关结果';
                     }
                 }).error(function (data) {
-                    $scope.count = 0;
+                    $scope.count = false;
                     $scope.error = data.message;
                 });
 
@@ -54,7 +55,7 @@ define(function (require) {
                             $scope.error = '没有搜索到相关结果';
                         }
                     }).error(function (data) {
-                        $scope.count = 0;
+                        $scope.count = false;
                         $scope.error = data.message;
                     });
                 };
