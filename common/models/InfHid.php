@@ -92,6 +92,10 @@ class InfHid extends \dbbase\models\InfHid
             $response = $this->usbCount($hid);
         }
 
+        if ($response['count'] <= 0) {
+            $response = $this->commonHidCount($hid);
+        }
+
         return $response;
     }
 
@@ -296,6 +300,18 @@ class InfHid extends \dbbase\models\InfHid
         return $response;
     }
 
+    public function commonHidCount($hid)
+    {
+        $count = $this->getInfHidCount($hid);
+
+        $response = [
+            'hid' => $hid,
+            'count' => $count,
+        ];
+
+        return $response;
+    }
+
     public function hidNameCount($hid_name)
     {
         $count = $this->getInfHidCount($hid_name, $type = 1);
@@ -347,7 +363,7 @@ class InfHid extends \dbbase\models\InfHid
                     $inf_hid['hid_name'] = $hid->hid_name;
                     $inf_hid['driver_ver'] = $hid->inf->driver_ver;
                     $inf_hid['driver_original_pubtime'] = $hid->inf->driver_original_pubtime;
-                    $inf_hid['qd_file_size'] = ceil($hid->driver->qd_file_size > 0 ? ($hid->driver->qd_file_size / 1024) : 0).'KB';
+                    $inf_hid['qd_file_size'] = round($hid->driver->qd_file_size > 0 ? ($hid->driver->qd_file_size / (1024 * 1024)) : 0, 1).'MB';
                     $inf_hid['class'] = $hid->inf->class;
                     $inf_hid['language'] = $hid->driver->language;
                     $inf_hid['qd_install_type'] = Driver::$install_type[$hid->driver->qd_install_type];

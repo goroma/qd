@@ -125,7 +125,7 @@ class ApiController extends Controller
     {
         try {
             $post = Yii::$app->getRequest()->getBodyParams();
-            if (!in_array($post['type']['type'], [1, 2])) {
+            if (!in_array($post['type'], [1, 2])) {
                 $error = '请选择硬件ID或设备名称';
                 throw new BadRequestHttpException($error, 400);
             }
@@ -135,7 +135,7 @@ class ApiController extends Controller
             }
 
             $inf_hid = new InfHid();
-            if (1 == $post['type']['type']) {
+            if (1 == $post['type']) {
                 $reg = '/^[a-zA-Z\\\0-9\*\_\{\}\&]+$/';
                 $error = '提示请输入正确的硬件ID格式';
                 if (!preg_match($reg, preg_quote($post['content']))) {
@@ -159,7 +159,7 @@ class ApiController extends Controller
     {
         try {
             $post = Yii::$app->getRequest()->getBodyParams();
-            if (!in_array($post['type']['type'], [1, 2])) {
+            if (!in_array($post['type'], [1, 2])) {
                 $error = '请选择硬件ID或设备名称';
                 throw new BadRequestHttpException($error, 400);
             }
@@ -169,7 +169,7 @@ class ApiController extends Controller
             }
 
             $inf_hid = new InfHid();
-            if (1 == $post['type']['type']) {
+            if (1 == $post['type']) {
                 $reg = '/^[a-zA-Z\\\0-9\*\_\{\}\&]+$/';
                 $error = '提示请输入正确的硬件ID格式';
                 if (!preg_match($reg, preg_quote($post['content']))) {

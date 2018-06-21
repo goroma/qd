@@ -92,7 +92,7 @@ class Driver extends \dbbase\models\Driver
         }
 
         $response['qd_name'] = $driver->qd_name;
-        $response['qd_file_size'] = ceil($driver->qd_file_size > 0 ? ($driver->qd_file_size / 1024) : 0).'KB';
+        $response['qd_file_size'] = round($driver->qd_file_size > 0 ? ($driver->qd_file_size / (1024 * 1024)) : 0, 1).'MB';
         $response['hash'] = $driver->qd_sha256;
         $response['qd_install_type'] = Driver::$install_type[$driver->qd_install_type];
         $response['qd_instruction'] = $driver->qd_instruction;

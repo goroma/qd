@@ -12,10 +12,10 @@ define(function (require) {
             $scope.search = function () {
                 $scope.error = '';
 
-                $http.post('api/search', $scope.searchModel).success(function (data) {
+                $http.post('api/search', {type: $scope.searchModel.type.type, content: $scope.searchModel.content}).success(function (data) {
                     if (data.data.count > 0) {
                         console.log(data);
-                        $state.go('list', {search: JSON.stringify($scope.searchModel)});
+                        $state.go('list', {type: $scope.searchModel.type.type, content: $scope.searchModel.content});
                     } else {
                         $scope.error = '没有搜索到相关结果';
                     }
