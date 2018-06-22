@@ -5,8 +5,8 @@ define(function (require) {
             function ($scope, $http, $state, $stateParams, $location) {
                 $scope.type = $stateParams.type;
                 $scope.content = $stateParams.content;
-                console.log($stateParams.type);
 
+                $scope.page_size = 20;
                 $scope.match_hid = '';
                 $scope.count = '';
                 $scope.hids = [];
@@ -24,32 +24,75 @@ define(function (require) {
                 });
                 $scope.searchModel.type = $scope.default_type;
 
-                $http.post('api/search-content', {type: $scope.type, content: $scope.content}).success(function (data) {
-                    console.log(data);
-                    var response = data.data;
-                    $scope.match_hid = response.match_hid;
-                    $scope.count = response.count;
-                    $scope.hids = response.hids;
-                    if ($scope.count <= 0) {
-                        $scope.count = false;
-                        $scope.error = '没有搜索到相关结果';
-                    }
-                }).error(function (data) {
-                    $scope.count = false;
-                    $scope.error = data.message;
-                });
-
-                $scope.search = function () {
-                    $scope.error = '';
-
-                    $location.url('list/'+$scope.searchModel.type.type+'/'+$scope.searchModel.content);
-
-                    $http.post('api/search-content', {type: $scope.searchModel.type.type, content: $scope.searchModel.content}).success(function (data) {
+                $scope.myinit = function() {
+                    var params = {
+                        type: $scope.searchModel.type.type,
+                        content: $scope.searchModel.content,
+                        page_size: $scope.page_size,
+                        page: 1
+                    };
+                    $http.post('api/search-content', params).success(function (data) {
                         console.log(data);
                         var response = data.data;
                         $scope.match_hid = response.match_hid;
                         $scope.count = response.count;
                         $scope.hids = response.hids;
+                        $scope.pageCount = response.page_total;
+
+                        if ($scope.count <= 0) {
+                            $scope.count = false;
+                            $scope.error = '没有搜索到相关结果';
+                        }
+                    }).error(function (data) {
+                        $scope.count = false;
+                        $scope.error = data.message;
+                    });
+                };
+                $scope.myinit();
+
+
+                $scope.search = function () {
+                    $scope.error = '';
+                    var params = {
+                        type: $scope.searchModel.type.type,
+                        content: $scope.searchModel.content,
+                        page_size: $scope.page_size,
+                        page: 1
+                    };
+
+                    $location.url('list/'+$scope.searchModel.type.type+'/'+$scope.searchModel.content);
+
+                    $http.post('api/search-content', params).success(function (data) {
+                        console.log(data);
+                        var response = data.data;
+                        $scope.match_hid = response.match_hid;
+                        $scope.count = response.count;
+                        $scope.hids = response.hids;
+                        if ($scope.count <= 0) {
+                            $scope.count = false;
+                            $scope.error = '没有搜索到相关结果';
+                        }
+                    }).error(function (data) {
+                        $scope.count = false;
+                        $scope.error = data.message;
+                    });
+                };
+
+                // 分页
+                $scope.onPageChange = function() {
+                    var params = {
+                        type: $scope.searchModel.type.type,
+                        content: $scope.searchModel.content,
+                        page_size: $scope.page_size,
+                        page: $scope.currentPage
+                    };
+
+                    $http.post('api/search-content', params).success(function (data) {
+                        var response = data.data;
+                        $scope.match_hid = response.match_hid;
+                        $scope.count = response.count;
+                        $scope.hids = response.hids;
+                        $scope.pageCount = response.page_total;
                         if ($scope.count <= 0) {
                             $scope.count = false;
                             $scope.error = '没有搜索到相关结果';

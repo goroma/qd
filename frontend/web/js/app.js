@@ -12,7 +12,7 @@ define(function (require, exports, module) {
     // 翻译安全转义
     require('angular-sanitize');
 
-    var app = angular.module('app', ['ui.router', 'ngSanitize']);
+    var app = angular.module('app', ['ui.router', 'ngSanitize', 'ng-pagination']);
 
     asyncLoader.configure(app);
 

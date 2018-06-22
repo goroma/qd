@@ -20,6 +20,7 @@ require.config({
         'header': 'js/home/HeaderController',
         'footer': 'js/home/FooterController',
         'brand': 'js/home/BrandController',
+        'ng-pagination': 'lib/ng-pagination',
     },
     shim: {
         'angular': {
@@ -48,6 +49,11 @@ require.config({
                 'angular',
             ],
         },
+        'ng-pagination': {
+            deps: [
+                'angular',
+            ],
+        },
         //'angular-translate': {
             //deps: [
                 //'angular',
@@ -70,7 +76,7 @@ require.config({
     urlArgs: "bust=" + (new Date()).getTime()  //防止读取缓存，调试用
 });
 
-require(['angular', 'js/app-routes', 'header', 'footer'], function (angular) {
+require(['angular', 'js/app-routes', 'header', 'footer', 'ng-pagination'], function (angular) {
     angular.element(document).ready(function () {
         angular.bootstrap(document, ['app']);
         angular.element(document).find('html').addClass('ng-app');

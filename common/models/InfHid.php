@@ -324,13 +324,15 @@ class InfHid extends \dbbase\models\InfHid
         return $response;
     }
 
-    public function hidSearch($hid, $type = 0)
+    public function hidSearch($hid, $page, $page_size, $type = 0)
     {
         $response = [
             'hid' => $hid,
-            'count' => 0,
             'match_hid' => '',
             'hids' => [],
+            'count' => 0,
+            'page_total' => 0,
+            'page' => 1,
         ];
         $inf_hid = [
             'hid_name' => '',
@@ -354,6 +356,13 @@ class InfHid extends \dbbase\models\InfHid
         }
 
         if ($res['count'] > 0) {
+            // 分页数据
+            $page_total = ceil($res['count']/$page_size);
+            $page = $page > $page_total ? $page_total : $page;
+            $offset = ($page - 1) * $page_size;
+            $response['page'] = $page;
+            $response['page_total'] = $page_total;
+
             $query = self::find()
                 ->select(self::tableName().'.*')
                 ->joinWith(['driver d']);
@@ -362,7 +371,7 @@ class InfHid extends \dbbase\models\InfHid
             } else {
                 $query->andWhere(['hid' => $res['hid']]);
             }
-            $inf_hids = $query->all();
+            $inf_hids = $query->offset($offset)->limit($page_size)->all();
 
             if ($inf_hids) {
                 foreach ($inf_hids as $hid) {
@@ -391,7 +400,7 @@ class InfHid extends \dbbase\models\InfHid
         }
 
         $response['match_hid'] = $res['hid'];
-        $response['count'] = $res['count'];
+        $response['count'] = (int) $res['count'];
 
         return $response;
     }

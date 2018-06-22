@@ -105,5 +105,10 @@
             </div>
             <hr style="border:#d8d4d4 0.3px dashed;">
         </div>
+
+        <div class="pager" ng-show="count">
+            <pager page-count="pageCount" current-page="currentPage" on-page-change="onPageChange()" first-text="首页" next-text="下一页" prev-text="上一页" last-text="尾页" show-goto="true" goto-text="跳转到"></pager>
+        </div>
+
     </div>
 </div>

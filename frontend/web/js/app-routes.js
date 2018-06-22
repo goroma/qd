@@ -26,7 +26,7 @@ define(function (require) {
                 controllerUrl: 'js/home/ListController',
                 controller: 'ListController',
                 dependencies: [
-                    'lib/ng-pagination',
+                    //'lib/ng-pagination',
                 ]
             }).
             state('download', {
