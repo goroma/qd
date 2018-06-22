@@ -55,7 +55,7 @@
 
         <h5 class="page-header" ng-show="count"></h5>
 
-        <div ng-show="count" ng-repeat="hid in hids">
+        <div ng-show="count" ng-repeat="hid in hids" style="border-bottom:1px dashed #d8d4d4;margin-top:10px">
             <div class="row">
                 <div class="col-md-12">
                     设备名称： {{ hid.hid_name }}
@@ -103,7 +103,7 @@
                     下载地址：<a type="button" class="btn btn-link" ng-click="toDownload(hid.hash)">点击下载</a>
                 </div>
             </div>
-            <hr style="border:#d8d4d4 0.3px dashed;">
+            <!--<hr style="border:#d8d4d4 0.3px dashed;">-->
         </div>
 
         <div class="pager" ng-show="count">
