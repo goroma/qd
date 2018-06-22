@@ -29,7 +29,7 @@
         <h5 class="page-header" ng-show="count"></h5>
 
         <div class="row" ng-show="count > 0">
-            <div class="col-md-7">匹配硬件ID：{{ match_hid }} 共找到{{ count }}个结果。</div>
+            <div class="col-md-7">匹配{{ searchModel.type == 1 ? '硬件ID' : '设备名称' }}：{{ match_hid }} 共找到{{ count }}个结果。</div>
             <div class="col-md-5">
                 <div class="col-md-3" style="margin: 0; padding: 0;">
                     操作系统过滤
