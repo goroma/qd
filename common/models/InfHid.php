@@ -324,7 +324,7 @@ class InfHid extends \dbbase\models\InfHid
         return $response;
     }
 
-    public function hidSearch($hid)
+    public function hidSearch($hid, $type = 0)
     {
         $response = [
             'hid' => $hid,
@@ -347,13 +347,21 @@ class InfHid extends \dbbase\models\InfHid
             'hash' => '',
         ];
 
-        $res = $this->getHidCount($hid);
+        if ($type) {
+            $res = $this->hidNameCount($hid);
+        } else {
+            $res = $this->getHidCount($hid);
+        }
 
         if ($res['count'] > 0) {
             $query = self::find()
                 ->select(self::tableName().'.*')
                 ->joinWith(['driver d']);
-            $query->andWhere(['hid' => $res['hid']]);
+            if ($type) {
+                $query->andWhere(['like', 'hid_name', $hid]);
+            } else {
+                $query->andWhere(['hid' => $hid]);
+            }
             $inf_hids = $query->all();
 
             if ($inf_hids) {

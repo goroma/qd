@@ -180,7 +180,7 @@ class ApiController extends Controller
 
                 return ['data' => $result, 'message' => 'success'];
             } else {
-                $result = $inf_hid->hidNameCount($post['content']);
+                $result = $inf_hid->hidSearch($post['content'], 2);
 
                 return ['data' => $result, 'message' => 'success'];
             }
