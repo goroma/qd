@@ -6,7 +6,7 @@ AppAsset::register($this);
 
 // 加载adminlte
 dmstr\web\AdminLteAsset::register($this);
-$this->title = 'sting';
+$this->title = 'drvsky';
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -16,7 +16,6 @@ $this->title = 'sting';
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DRVSKY</title>
 <?php $this->head() ?>
-<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
 <script>paceOptions = {ajax: {trackMethods: ['GET', 'POST']}};</script>
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 </head>

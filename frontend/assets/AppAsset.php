@@ -20,12 +20,11 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         //'css/bootstrap.css',
-        'css/style.css',
-        'css/style4.css',
+        'css/ng-pagination.css',
         'lib/pace/pace-theme-minimal.tmpl.css',
     ];
     public $js = [
-        'js/simpleCart.min.js',
+        //'js/simpleCart.min.js',
         'lib/pace/pace.min.js',
     ];
     public $depends = [

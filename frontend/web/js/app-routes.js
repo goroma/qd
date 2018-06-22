@@ -25,6 +25,9 @@ define(function (require) {
                 templateUrl: 'templates/home/list.html',
                 controllerUrl: 'js/home/ListController',
                 controller: 'ListController',
+                dependencies: [
+                    'lib/ng-pagination',
+                ]
             }).
             state('download', {
                 url: '/download/:hash',

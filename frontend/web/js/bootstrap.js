@@ -70,7 +70,7 @@ require.config({
     urlArgs: "bust=" + (new Date()).getTime()  //防止读取缓存，调试用
 });
 
-require(['angular', 'js/app-routes', 'header', 'footer', 'brand'], function (angular) {
+require(['angular', 'js/app-routes', 'header', 'footer'], function (angular) {
     angular.element(document).ready(function () {
         angular.bootstrap(document, ['app']);
         angular.element(document).find('html').addClass('ng-app');

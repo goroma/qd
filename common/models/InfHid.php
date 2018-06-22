@@ -360,7 +360,7 @@ class InfHid extends \dbbase\models\InfHid
             if ($type) {
                 $query->andWhere(['like', 'hid_name', $hid]);
             } else {
-                $query->andWhere(['hid' => $hid]);
+                $query->andWhere(['hid' => $res['hid']]);
             }
             $inf_hids = $query->all();
 
