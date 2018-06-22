@@ -157,6 +157,8 @@ class ApiController extends Controller
 
     public function actionSearchContent()
     {
+        $os = '';
+        $pf = '';
         try {
             $post = Yii::$app->getRequest()->getBodyParams();
             if (!in_array($post['type'], [1, 2])) {
@@ -171,6 +173,15 @@ class ApiController extends Controller
             $page = (!isset($post['page']) || ($post['page'] <= 0)) ? 1 : $post['page'];
             $page_size = (!isset($post['page_size']) || ($post['page_size'] <= 0)) ? 20 : $post['page_size'];
 
+
+            if (isset($post['os']) && $post['os']) {
+                $os = $post['os'];
+            }
+
+            if (isset($post['pf']) && $post['pf']) {
+                $pf = $post['pf'];
+            }
+
             $inf_hid = new InfHid();
             if (1 == $post['type']) {
                 $reg = '/^[a-zA-Z\\\0-9\*\_\{\}\&]+$/';
@@ -179,11 +190,11 @@ class ApiController extends Controller
                     throw new BadRequestHttpException($error, 400);
                 }
 
-                $result = $inf_hid->hidSearch($post['content'], $page, $page_size);
+                $result = $inf_hid->hidSearch($post['content'], $os, $pf, $page, $page_size);
 
                 return ['data' => $result, 'message' => 'success'];
             } else {
-                $result = $inf_hid->hidSearch($post['content'], $page, $page_size, 2);
+                $result = $inf_hid->hidSearch($post['content'], $os, $pf, $page, $page_size, 2);
 
                 return ['data' => $result, 'message' => 'success'];
             }
