@@ -365,12 +365,17 @@ class InfHid extends \dbbase\models\InfHid
 
             $query = self::find()
                 ->select(self::tableName().'.*')
-                ->joinWith(['driver d']);
+                ->distinct()
+                ->joinWith(['driver d'])
+                ->joinWith(['inf i'])
+                ->joinWith(['oses ds'])
+                ->where(['d.is_del' => self::NOT_DEL]);
             if ($type) {
                 $query->andWhere(['like', 'hid_name', $hid]);
             } else {
                 $query->andWhere(['hid' => $res['hid']]);
             }
+            $query->orderBy(['d.rank' => SORT_DESC, 'driver_pubtime' => SORT_DESC]);
             $inf_hids = $query->offset($offset)->limit($page_size)->all();
 
             if ($inf_hids) {
@@ -418,13 +423,18 @@ class InfHid extends \dbbase\models\InfHid
 
         $query = self::find()
                 ->select(self::tableName().'.*')
-                ->joinWith(['driver d']);
+                ->distinct()
+                ->joinWith(['driver d'])
+                ->joinWith(['inf i'])
+                ->joinWith(['oses ds'])
+                ->where(['d.is_del' => self::NOT_DEL]);
 
         if ($type) {
             $query->andWhere(['like', 'hid_name', $hid]);
         } else {
             $query->andWhere(['hid' => $hid]);
         }
+        $query->orderBy(['d.rank' => SORT_DESC, 'driver_pubtime' => SORT_DESC]);
 
         return $query->count();
     }

@@ -2,8 +2,15 @@
 
 namespace backend\models\driver;
 
+use Yii;
+
 class Driver extends \common\models\Driver
 {
+    public static function find()
+    {
+        return Yii::createObject(\yii\db\ActiveQuery::className(), [get_called_class()])->where(['is_del' => self::NOT_DEL]);
+    }
+
     public function insertData($data)
     {
         if (isset($data['qd_sha256'])) {

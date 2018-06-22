@@ -24,7 +24,7 @@ use Yii;
  * @property string $updated_at 编辑时间
  * @property int $is_del 是否删除
  */
-class Driver extends \dbbase\models\ActiveRecord
+class Driver extends \dbbase\models\BaseActiveRecord
 {
     /**
      * {@inheritdoc}
