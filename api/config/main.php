@@ -105,17 +105,8 @@ return [
             'enableStrictParsing' => true,
             'showScriptName' => false,
             'rules' => [
-                'GET send_email' => 'common/user/send-password-reset-token-mail',
-                'POST v1/login' => 'common/user/login',
-                'POST v1/register' => 'common/user/register',
-                'GET v1/child_qrcode/<id:\d+>' => 'v1/child/child-qrcode',
-                'GET v1/camera_access_token' => 'v1/camera/access-token',
-                'PUT v1/bind_camera' => 'v1/camera/bind-camera',
-                'GET v1/camera_pic/<id:\d+>' => 'v1/camera/device-capture',
-                'GET v1/camera_address/<id:\d+>' => 'v1/camera/camera-address',
-                //'POST v1/send_message' => 'common/send-message/send-verify-code',
-                'GET v1/teacher/<phone:\w+>' => 'v1/teacher/check-teacher',
-                'GET v1/homepage' => 'v1/home-page/get-config',
+                'POST search' => 'v1/api/search',
+                'POST searchHash' => 'v1/api/search-hash',
                 [
                     'class' => 'yii\rest\UrlRule',
                     // 类似这样
@@ -132,17 +123,6 @@ return [
                     // 访问时使用复数
                     'controller' => [
                         'v1/country',
-                        'v1/child',
-                        'v1/child-transfer',
-                        'v1/nursery',
-                        'v1/teacher',
-                        'v1/teacher-comment',
-                        'v1/notice',
-                        'v1/notice-record',
-                        'v1/cookbook',
-                        'v1/camera',
-                        'v1/address',
-                        'v1/parent-comment',
                     ],
                     'extraPatterns' => [
                     ],
@@ -153,16 +133,8 @@ return [
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => [
-                        'v2/we-chat-request',
-                        'v2/we-chat-pay-notify',
-                        'v2/payment-notify',
                         'v2/country',
                         'v2/driver',
-                        'v2/vehicle',
-                        'v2/shop',
-                        'v2/pda',
-                        'v2/search',
-                        'v2/hisstatus',
                     ],
                     'extraPatterns' => [
                         'GET search' => 'search',

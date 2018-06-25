@@ -17,14 +17,6 @@ use common\models\LoginForm;
 
 use frontend\models\ContactForm;
 use frontend\models\SignupForm;
-use frontend\models\order\Order;
-
-// payment SDK
-use Payment\Config;
-use Payment\Client\Charge;
-use Payment\ChargeContext;
-use Payment\Common\PayException;
-use common\models\common\Payment;
 
 /**
  * Api controller

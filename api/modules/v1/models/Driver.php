@@ -3,23 +3,14 @@
 namespace api\modules\v1\models;
 
 use yii\data\ActiveDataProvider;
-use common\models\system\SystemUser as User;
 
-class Nursery extends \common\models\nursery\Nursery
+class Driver extends \common\models\driver\Driver
 {
     public function fields()
     {
         $fields = parent::fields();
 
         $extraFields = [
-            'nursery_logo' => function ($model) {
-                $logo = $model->nurseryLogo;
-                if ($logo) {
-                    return $logo->nursery_pic;
-                } else {
-                    return '';
-                }
-            },
         ];
         $fields = array_merge($fields, $extraFields);
 
