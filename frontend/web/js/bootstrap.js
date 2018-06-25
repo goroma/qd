@@ -72,8 +72,8 @@ require.config({
         'brand': {
         },
     },
-    //urlArgs: 'v=0.1',
-    urlArgs: "bust=" + (new Date()).getTime()  //防止读取缓存，调试用
+    urlArgs: 'v=1.0',
+    //urlArgs: "bust=" + (new Date()).getTime()  //防止读取缓存，调试用
 });
 
 require(['angular', 'js/app-routes', 'header', 'footer', 'ng-pagination'], function (angular) {

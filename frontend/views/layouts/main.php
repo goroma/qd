@@ -5,7 +5,7 @@ use frontend\assets\AppAsset;
 AppAsset::register($this);
 
 // 加载adminlte
-dmstr\web\AdminLteAsset::register($this);
+//dmstr\web\AdminLteAsset::register($this);
 $this->title = 'drvsky';
 ?>
 <?php $this->beginPage() ?>
