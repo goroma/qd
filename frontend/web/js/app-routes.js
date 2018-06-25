@@ -6,7 +6,7 @@ define(function (require) {
         $rootScope.$stateParams = $stateParams;
     }]);
 
-    app.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function ($stateProvider, $urlRouterProvider, $httpProvider) {
+    app.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider) {
         $urlRouterProvider.otherwise('/home');
 
         $stateProvider.
@@ -35,94 +35,6 @@ define(function (require) {
                 controllerUrl: 'js/home/DownloadController',
                 controller: 'DownloadController',
             }).
-            state('users', {
-                url: '/users',
-                templateUrl: 'templates/users/users.html',
-                controllerUrl: 'js/users/usersController',
-                controller: 'usersController',
-                // load more controllers, services, filters, ...
-                dependencies: [
-                    'js/services/usersService',
-                    'js/filters/commonFilter',
-                ]
-            }).
-            state('login', {
-                url: '/login',
-                templateUrl: 'templates/users/login.html',
-                controllerUrl: 'js/users/LoginController',
-                controller: 'LoginController',
-                dependencies: [
-                    //'js/filters/translate',
-                ]
-            }).
-            state('signup', {
-                url: '/signup',
-                templateUrl: 'templates/users/signup.html',
-                controllerUrl: 'js/users/SignUpController',
-                controller: 'SignUpController'
-            }).
-            state('dashboard', {
-                url: '/dashboard',
-                templateUrl: 'templates/users/dashboard.html',
-                controllerUrl: 'js/users/DashboardController',
-                controller: 'DashboardController',
-            }).
-            state('contact', {
-                url: '/contact',
-                templateUrl: 'templates/users/contact.html',
-                controllerUrl: 'js/users/ContactController',
-                controller: 'ContactController',
-            }).
-            state('single', {
-                url: '/single',
-                templateUrl: 'templates/products/single.html',
-                controllerUrl: 'js/products/SingleController',
-                controller: 'SingleController',
-                dependencies: [
-                    'js/imagezoom',
-                    'js/jquery.flexslider',
-                ]
-            }).
-            state('product', {
-                url: '/product',
-                templateUrl: 'templates/products/product.html',
-                controllerUrl: 'js/products/ProductController',
-                controller: 'ProductController',
-                dependencies: [
-                ]
-            }).
-            state('category', {
-                url: '/category',
-                templateUrl: 'templates/products/category.html',
-                controllerUrl: 'js/products/CategoryController',
-                controller: 'CategoryController',
-                dependencies: [
-                ]
-            }).
-            state('wechat_pay', {
-                url: '/wechat_pay',
-                templateUrl: 'templates/products/wechat_pay.html',
-                controllerUrl: 'js/products/WeChatPayController',
-                controller: 'WeChatPayController',
-                dependencies: [
-                ]
-            }).
-            state('checkout', {
-                url: '/checkout',
-                templateUrl: 'templates/users/checkout.html',
-                controllerUrl: 'js/users/CheckoutController',
-                controller: 'CheckoutController',
-                dependencies: [
-                ]
-            }).
-            state('wishlist', {
-                url: '/wishlist',
-                templateUrl: 'templates/users/wishlist.html',
-                controllerUrl: 'js/users/WishlistController',
-                controller: 'WishlistController',
-                dependencies: [
-                ]
-            }).
             state('components', {
                 url: '/components',
                 templateUrl: 'templates/components/components.html',
@@ -132,21 +44,7 @@ define(function (require) {
 
             $httpProvider.interceptors.push('authInterceptor');
 
-            // load 'cn' table on startup
-            var lang = window.localStorage.lang || 'cn';
-
-            // configures staticFilesLoader
-            //$translateProvider.useStaticFilesLoader({
-                //prefix: '/i18n/',
-                //suffix: '.json'
-            //});
-            //$translateProvider.preferredLanguage(lang);
-
-            // Enable escaping of HTML
-            //$translateProvider.useSanitizeValueStrategy('sanitize');
-
-            // Enable escaping of HTML
-            //$translateProvider.useSanitizeValueStrategy('escape');
+            $locationProvider.html5Mode(true);
     }]);
 
     app.factory('authInterceptor', function ($q, $window, $location) {
