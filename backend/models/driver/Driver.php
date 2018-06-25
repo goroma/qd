@@ -11,6 +11,18 @@ class Driver extends \common\models\Driver
         return Yii::createObject(\yii\db\ActiveQuery::className(), [get_called_class()])->where(['is_del' => self::NOT_DEL]);
     }
 
+    /**
+     * 重定义delete方法,默认逻辑删除.
+     */
+    public function delete()
+    {
+        if ($this->hasAttribute('is_del') && !$this->isNewRecord) {
+            $this->is_del = self::IS_DEL;
+
+            return $this->save(false);
+        }
+    }
+
     public function insertData($data)
     {
         if (isset($data['qd_sha256'])) {

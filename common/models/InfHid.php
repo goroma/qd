@@ -343,6 +343,7 @@ class InfHid extends \dbbase\models\InfHid
             'language' => '',
             'qd_install_type' => '',
             'qd_instruction' => '',
+            'qd_source' => '',
             'qd_os' => [],
             'qd_os_array' => [],
             'qd_os_string' => '',
@@ -398,6 +399,7 @@ class InfHid extends \dbbase\models\InfHid
                     $inf_hid['language'] = $hid->driver->language;
                     $inf_hid['qd_install_type'] = Driver::$install_type[$hid->driver->qd_install_type];
                     $inf_hid['qd_instruction'] = $hid->driver->qd_instruction;
+                    $inf_hid['qd_source'] = $hid->driver->qd_source;
                     $inf_hid['hash'] = $hid->driver->qd_sha256;
                     $oses = $hid->driver->oses;
                     foreach ($oses as $os) {

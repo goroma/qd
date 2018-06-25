@@ -81,6 +81,7 @@ class Driver extends \dbbase\models\Driver
             'hash' => '',
             'qd_install_type' => '',
             'qd_instruction' => '',
+            'qd_source' => '',
             'qd_download_url' => [],
         ];
         $driver = Driver::findOne([
@@ -96,6 +97,7 @@ class Driver extends \dbbase\models\Driver
         $response['hash'] = $driver->qd_sha256;
         $response['qd_install_type'] = Driver::$install_type[$driver->qd_install_type];
         $response['qd_instruction'] = $driver->qd_instruction;
+        $response['qd_source'] = $driver->qd_source;
         $response['qd_download_url'] = explode(',', $driver->qd_download_url);
 
         return $response;

@@ -60,12 +60,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::begin(); echo GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
+        //'ajaxUpdate' => true,
         'pager' => [
             'firstPageLabel' => 'ι‹',
             'lastPageLabel' => '›ι',
         ],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            [
+                'class' => 'yii\grid\SerialColumn',
+            ],
 
             'id',
             'qd_name',
@@ -91,10 +94,28 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t('app', 'Operation'),
                 'buttons' => [
+                    'view' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>',
+                            Yii::$app->urlManager->createUrl(['driver/driver/view', 'id' => $model->id]),
+                            ['title' => Yii::t('yii', 'View'), 'target' => '_blank']
+                        );
+                    },
                     'update' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-pencil"></span>',
                             Yii::$app->urlManager->createUrl(['driver/driver/update', 'id' => $model->id, 'edit' => 't']),
-                            ['title' => Yii::t('yii', 'Update')]
+                            ['title' => Yii::t('yii', 'Update'), 'target' => '_blank']
+                        );
+                    },
+                    'delete' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-trash"></span>',
+                            Yii::$app->urlManager->createUrl(['driver/driver/delete', 'id' => $model->id]),
+                            [
+                                'title' => Yii::t('yii', 'Delete'),
+                                'data-pjax' => 1,
+                                'aria-label' => Yii::t('yii', 'Delete'),
+                                'data-confirm' => '您确定要删除此项吗？',
+                                'data-method' => 'post'
+                            ]
                         );
                     }
                 ],

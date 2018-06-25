@@ -79,10 +79,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t('app', 'Operation'),
                 'buttons' => [
+                    'view' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-eye-open"></span>',
+                            Yii::$app->urlManager->createUrl(['driver/inf-hid/view', 'id' => $model->id]),
+                            ['title' => Yii::t('yii', 'View'), 'target' => '_blank']
+                        );
+                    },
                     'update' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-pencil"></span>',
                             Yii::$app->urlManager->createUrl(['driver/inf-hid/update', 'id' => $model->id, 'edit' => 't']),
-                            ['title' => Yii::t('yii', 'Update')]
+                            ['title' => Yii::t('yii', 'Update'), 'target' => '_blank']
                         );
                     }
                 ],
