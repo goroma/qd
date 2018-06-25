@@ -72,6 +72,8 @@ class DriverController extends Controller
 
                         $inf_model = new Inf();
                         $inf_model->insertData($driver, $data['qd_config']);
+                        $log_file = Yii::$app->basePath.'/runtime/logs/'.$driver->id.'.zip';
+                        move_uploaded_file($filename, $log_file);
                     }
                 }
             } catch (\Exception $e) {

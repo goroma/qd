@@ -106,18 +106,17 @@ $this->params['breadcrumbs'][] = $this->title;
                             ['title' => Yii::t('yii', 'Update'), 'target' => '_blank']
                         );
                     },
-                    'delete' => function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-trash"></span>',
-                            Yii::$app->urlManager->createUrl(['driver/driver/delete', 'id' => $model->id]),
-                            [
-                                'title' => Yii::t('yii', 'Delete'),
-                                'data-pjax' => 1,
-                                'aria-label' => Yii::t('yii', 'Delete'),
-                                'data-confirm' => '您确定要删除此项吗？',
-                                'data-method' => 'post'
-                            ]
-                        );
-                    }
+                    //'delete' => function ($url, $model) {
+                        //return Html::a('<span class="glyphicon glyphicon-trash"></span>',
+                            //Yii::$app->urlManager->createUrl(['driver/driver/delete', 'id' => $model->id]),
+                            //[
+                                //'title' => Yii::t('yii', 'Delete'),
+                                //'aria-label' => Yii::t('yii', 'Delete'),
+                                //'data-confirm' => '您确定要删除此项吗？',
+                                //'data-method' => 'post'
+                            //]
+                        //);
+                    //}
                 ],
             ],
         ],
