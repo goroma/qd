@@ -53,17 +53,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->driver->qd_name;
                 },
             ],
-            'inf_name', 
+            'inf_name',
             'class',
             'driver_ver',
             'driver_pubtime',
             'driver_original_pubtime',
-//            ['attribute' => 'driver_pubtime','format' => ['date',(isset(Yii::$app->modules['datecontrol']['displaySettings']['date'])) ? Yii::$app->modules['datecontrol']['displaySettings']['date'] : 'd-m-Y']], 
-//            'driver_provider', 
-//            'inf_name', 
-//            'inf_sha256', 
-//            ['attribute' => 'created_at','format' => ['datetime',(isset(Yii::$app->modules['datecontrol']['displaySettings']['datetime'])) ? Yii::$app->modules['datecontrol']['displaySettings']['datetime'] : 'd-m-Y H:i:s A']], 
-//            ['attribute' => 'updated_at','format' => ['datetime',(isset(Yii::$app->modules['datecontrol']['displaySettings']['datetime'])) ? Yii::$app->modules['datecontrol']['displaySettings']['datetime'] : 'd-m-Y H:i:s A']], 
+//            ['attribute' => 'driver_pubtime','format' => ['date',(isset(Yii::$app->modules['datecontrol']['displaySettings']['date'])) ? Yii::$app->modules['datecontrol']['displaySettings']['date'] : 'd-m-Y']],
+//            'driver_provider',
+//            'inf_name',
+//            'inf_sha256',
+//            ['attribute' => 'created_at','format' => ['datetime',(isset(Yii::$app->modules['datecontrol']['displaySettings']['datetime'])) ? Yii::$app->modules['datecontrol']['displaySettings']['datetime'] : 'd-m-Y H:i:s A']],
+//            ['attribute' => 'updated_at','format' => ['datetime',(isset(Yii::$app->modules['datecontrol']['displaySettings']['datetime'])) ? Yii::$app->modules['datecontrol']['displaySettings']['datetime'] : 'd-m-Y H:i:s A']],
 
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -72,13 +72,21 @@ $this->params['breadcrumbs'][] = $this->title;
                     'view' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-eye-open"></span>',
                             Yii::$app->urlManager->createUrl(['driver/inf/view', 'id' => $model->id]),
-                            ['title' => Yii::t('yii', 'View'), 'target' => '_blank']
+                            [
+                                'title' => Yii::t('yii', 'View'),
+                                'target' => '_blank',
+                                'data-pjax' => 0,
+                            ]
                         );
                     },
                     'update' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-pencil"></span>',
                             Yii::$app->urlManager->createUrl(['driver/inf/update', 'id' => $model->id, 'edit' => 't']),
-                            ['title' => Yii::t('yii', 'Update'), 'target' => '_blank']
+                            [
+                                'title' => Yii::t('yii', 'Update'),
+                                'target' => '_blank',
+                                'data-pjax' => 0,
+                            ]
                         );
                     }
                 ],

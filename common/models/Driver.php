@@ -98,8 +98,33 @@ class Driver extends \dbbase\models\Driver
         $response['qd_install_type'] = Driver::$install_type[$driver->qd_install_type];
         $response['qd_instruction'] = $driver->qd_instruction;
         $response['qd_source'] = $driver->qd_source;
-        $response['qd_download_url'] = explode(',', $driver->qd_download_url);
+        $url_array = array_filter(explode(',', $driver->qd_download_url));
+        foreach ($url_array as $url) {
+            $response['qd_download_url'][] = $this->privateKeyC($url);
+        }
 
         return $response;
+    }
+
+    private function privateKeyC($url)
+    {
+        if (!$url) {
+            return $url;
+        }
+
+        $url_array = parse_url($url);
+        $aliyun = Yii::$app->params['aliyun'];
+        $domain = $aliyun['anti_stealing_link_url'];
+        if ($url_array['scheme'].'://'.$url_array['host'] != $domain) {
+            return $url;
+        }
+
+        $time_hex_string = dechex(time());
+        $key = $aliyun['anti_stealing_link_key'];
+        $filename = $url_array['path'];
+        $sstring = $key.$filename.$time_hex_string;
+        $md5 = md5($sstring);
+
+        return $domain.'/'.$md5.'/'.$time_hex_string.$filename;
     }
 }

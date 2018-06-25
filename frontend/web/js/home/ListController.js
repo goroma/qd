@@ -48,7 +48,6 @@ define(function (require) {
                         page: 1
                     };
                     $http.post('api/search-content', params).success(function (data) {
-                        console.log(data);
                         var response = data.data;
                         $scope.match_hid = response.match_hid;
                         $scope.count = response.count;
@@ -83,7 +82,6 @@ define(function (require) {
                     $location.url('list/'+$scope.searchModel.type.type+'/'+$scope.searchModel.content);
 
                     $http.post('api/search-content', params).success(function (data) {
-                        console.log(data);
                         var response = data.data;
                         $scope.match_hid = response.match_hid;
                         $scope.count = response.count;
@@ -124,7 +122,6 @@ define(function (require) {
                 };
 
                 $scope.toDownload = function toDownload(hash) {
-                    console.log('download');
                     $state.go('download', {hash: hash});
                 }
             }

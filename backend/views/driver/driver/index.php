@@ -97,13 +97,21 @@ $this->params['breadcrumbs'][] = $this->title;
                     'view' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-eye-open"></span>',
                             Yii::$app->urlManager->createUrl(['driver/driver/view', 'id' => $model->id]),
-                            ['title' => Yii::t('yii', 'View'), 'target' => '_blank']
+                            [
+                                'title' => Yii::t('yii', 'View'),
+                                'target' => '_blank',
+                                'data-pjax' => 0,
+                            ]
                         );
                     },
                     'update' => function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-pencil"></span>',
                             Yii::$app->urlManager->createUrl(['driver/driver/update', 'id' => $model->id, 'edit' => 't']),
-                            ['title' => Yii::t('yii', 'Update'), 'target' => '_blank']
+                            [
+                                'title' => Yii::t('yii', 'Update'),
+                                'target' => '_blank',
+                                'data-pjax' => 0,
+                            ]
                         );
                     },
                     //'delete' => function ($url, $model) {

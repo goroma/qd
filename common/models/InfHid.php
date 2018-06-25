@@ -404,11 +404,12 @@ class InfHid extends \dbbase\models\InfHid
                     $oses = $hid->driver->oses;
                     foreach ($oses as $os) {
                         $qd_os[$os->qd_pf][] = $os->qd_os;
-                        $qd_os_array[] = $os->qd_os;
+                        $qd_os_array[] = $os->qd_os.'-'.$os->qd_pf;
                     }
                     $inf_hid['qd_os'] = $qd_os;
                     $inf_hid['qd_os_array'] = array_values(array_unique($qd_os_array));
                     $inf_hid['qd_os_string'] = implode(',', array_unique($qd_os_array));
+
                     $response['hids'][] = $inf_hid;
                 }
             }
