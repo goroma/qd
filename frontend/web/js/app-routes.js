@@ -7,11 +7,11 @@ define(function (require) {
     }]);
 
     app.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider) {
-        $urlRouterProvider.otherwise('/home');
+        $urlRouterProvider.otherwise('/');
 
         $stateProvider.
-            state('home', {
-                url: '/home',
+            state('/', {
+                url: '/',
                 templateUrl: 'templates/home/home.html',
                  // new attribute for ajax load controller
                 controllerUrl: 'js/home/HomeController',
